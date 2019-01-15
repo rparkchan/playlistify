@@ -6,5 +6,5 @@ import Flipper from './components/flipper.js';
 
 ReactDOM.render(
   <Flipper />,
-  document.getElementById('root')
+  document.getElementById('root') 
 );

@@ -34,7 +34,7 @@ class BookmarkList extends React.Component {
     chrome.storage.local.get(["pl_tabid"], function(result){
       if(result.pl_tabid != null) {
         chrome.tabs.sendMessage(result.pl_tabid,{play_button:true}, function(response) {
-          console.log("play clicked!");
+          console.log("play message sent!");
         });
       }
     });    

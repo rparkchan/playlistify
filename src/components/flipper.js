@@ -15,7 +15,6 @@ class Flipper extends React.Component {
     var that = this;
     chrome.storage.local.get(['pl_view', 'pl_playlist', 'pl_index'], function(result) {
       that.setState({playlist_view:result.pl_view, bm_list:result.pl_playlist, bm_index:result.pl_index});
-      // console.log(result.pl_playlist);
     })
   }
 

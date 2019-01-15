@@ -29,6 +29,7 @@ class FolderList extends React.Component {
   }
 
   render() {
+    var that = this;
     return (
       <div 
         style={{
@@ -36,7 +37,7 @@ class FolderList extends React.Component {
         }}
       > {
         this.state.folders.map(function(folder) {
-          return <FolderButton node={folder.node} depth={folder.depth}/>
+          return <FolderButton node={folder.node} depth={folder.depth} setPLView={that.props.setPLView}/>
         })
       } </div>
     )

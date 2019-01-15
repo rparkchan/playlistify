@@ -34,7 +34,7 @@ class BookmarkButton extends React.Component {
           style={{
             color: that.props.current ? "red" : "black",
             background: "url(chrome://favicon/size/16@1x/" + that.props.url + ") no-repeat", // 1x or 2x
-            backgroundPosition: "2px center",
+            backgroundPosition: "4px center",
             border: "1px solid",
             borderRadius: "2px",
             paddingLeft: "24px",

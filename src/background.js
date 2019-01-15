@@ -34,7 +34,7 @@ function execValidTab(bm_list, bm_index, callback) {
 function newPlaylistTab(bm_list, bm_index, callback) {
   chrome.tabs.create({url:bm_list[bm_index].url, active:true}, function (tab) {
     chrome.windows.create({tabId: tab.id}, function(ic_window) {
-      chrome.storage.local.set({pl_tabid:tab.id,pl_window:ic_window.id}, function () { 
+      chrome.storage.local.set({pl_tabid:tab.id,pl_windowid:ic_window.id}, function () { 
         postLoadExec(tab.id, callback);
       });
     });
@@ -93,6 +93,17 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         });
       }
     });
+  }
+
+  // message 3: close the playlist completely
+  if (message.close_playlist != null) {
+    chrome.storage.local.get(["pl_tabid"], function(result) {
+      if(result.pl_tabid != null) {
+        chrome.tabs.remove(result.pl_tabid, function() {
+          chrome.storage.local.remove(["pl_playlist", "pl_index", "pl_tabid", "pl_windowid", "pl_view"])
+        })
+      }
+    })
   }
 });
 

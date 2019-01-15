@@ -2,8 +2,8 @@
 
 /******************************************************************************************************/
 
-// Autoplay:
-//    website-dependent listeners/other for autoplay functionality
+var url = window.location.href;
+var play_button = [];
 
 function playNext() {
   chrome.storage.local.get(["pl_playlist", "pl_index"], function(result) {
@@ -17,18 +17,20 @@ function playNext() {
   });
 }
 
-var url = window.location.href;
+var music_regex = {
+  youtube: /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/,
+  bandcamp: /((https?:\/\/(www\.)?(.*\.bandcamp\.com\/track\/.*|.*\.bandcamp\.com\/album\/.*)))/i,
+  soundcloud: /((https?:\/\/(www\.)?(.*soundcloud\.com\/.*\/.*|.*soundcloud\.com\/.*\/.*\/.*)))/i,
+  vimeo: /((https?:\/\/(www\.)?(vimeo\.com\/.*)))/i
+}
 
-var vids = document.getElementsByTagName('video');
-var auds = document.getElementsByTagName('audio');
-console.log(vids);
-console.log(auds);
-
-// Youtube
-var yt_exp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-if(url.match(yt_exp)) {
+// YouTube
+if(url.match(music_regex.youtube)) {
+  // no need to start upon load
   console.log("youtube match");
-
+  play_button = document.getElementsByClassName("ytp-play-button ytp-button");
+  
+  // listen for end of video
   var videos = document.getElementsByTagName('video');
   if(videos.length > 0) { 
     videos[0].addEventListener('ended',function() {
@@ -40,17 +42,18 @@ if(url.match(yt_exp)) {
   }
 }
 
-// bandcamp
-var bc_exp = /((https?:\/\/(www\.)?(.*\.bandcamp\.com\/track\/.*|.*\.bandcamp\.com\/album\/.*)))/i;
-if(url.match(bc_exp)) {
+// Bandcamp
+else if(url.match(music_regex.bandcamp)) {
+  // Bandcamp links don't start automatically
   console.log("bandcamp match");
-  var play_button = document.getElementsByClassName('playbutton');
+  play_button = document.getElementsByClassName('playbutton');
   if(play_button[0]) {
     if(play_button[0].className == "playbutton") {
       play_button[0].click();
     }
   }
 
+  // listen for end of audio
   var audios = document.getElementsByTagName('audio');
   if(audios.length > 0) { 
     audios[0].addEventListener('ended',function() {
@@ -59,17 +62,18 @@ if(url.match(bc_exp)) {
   }
 }
 
-// soundcloud
-var sc_exp = /((https?:\/\/(www\.)?(.*soundcloud\.com\/.*\/.*|.*soundcloud\.com\/.*\/.*\/.*)))/i;
-if(url.match(sc_exp)) {
+// Soundcloud
+else if(url.match(music_regex.soundcloud)) {
+  // Soundcloud links don't start automatically
   console.log("soundcloud match");
-  var play_button = document.getElementsByClassName("sc-button-play playButton sc-button m-stretch");
+  play_button = document.getElementsByClassName("sc-button-play playButton sc-button m-stretch");
   if(play_button[0]) {
     if(play_button[0].title == "Play") {
       play_button[0].click();
     }
   }
 
+  // listen for end of audio
   var config = {attributes : true, childlist: true, subtree: true, characterData: true};
   var el = document.getElementsByClassName("playbackSoundBadge");
   var icon_href = document.getElementsByClassName("playbackSoundBadge__avatar sc-media-image")[0].href;
@@ -83,17 +87,18 @@ if(url.match(sc_exp)) {
   observer.observe(el[0], config);
 } 
 
-// vimeo
-var vim_exp = /((https?:\/\/(www\.)?(vimeo\.com\/.*)))/i;
-if(url.match(vim_exp)) {
+// Vimeo
+else if(url.match(music_regex.vimeo)) {
+  // Vimeo links don't start automatically
   console.log("vimeo match");
-  var play_button = document.getElementsByClassName("play rounded-box");
+  play_button = document.getElementsByClassName("play rounded-box");
   if(play_button[0]) {
     if(play_button[0].title == "Play") {
       play_button[0].click();
     }
   }
 
+  // listen for end of audio
   var videos = document.getElementsByTagName('video');
   if(videos.length > 0) { 
     videos[0].addEventListener('ended',function() {
@@ -108,16 +113,12 @@ if(url.match(vim_exp)) {
 /******************************************************************************************************/
 
 // Listener:
-//    handle popup.js "Play/Pause", "Volume", and "Skip" commands
+//    handle popup.js "Play/Pause", "Volume", and "Skip" messages 
 
 chrome.runtime.onMessage.addListener(function(message, sender, response) {
-  console.log(message);
-  // so this works when triggered by popup button only... wtf
   if(message.play_button != null) {
-    var play_button = document.getElementsByClassName("playControl sc-ir playControls__control playControls__play")[0];
-    if(play_button) {
-      play_button.focus();
-      play_button.click();
+    if(play_button[0]) {
+      play_button[0].click();
     }
   }
 });

@@ -28,7 +28,7 @@ function FolderButton(props) {
           processBookmarks(props.node, bookmarks_list);
           if(!(bookmarks_list.length === 0)){
             chrome.runtime.sendMessage({bookmarks_list:bookmarks_list}, function(response) { 
-              console.log(response);
+              props.setPLView(true);
             });
           }
           else {

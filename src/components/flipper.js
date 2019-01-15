@@ -14,33 +14,24 @@ class Flipper extends React.Component {
   componentDidMount() {
     var that = this;
     chrome.storage.local.get(['pl_view', 'pl_playlist', 'pl_index'], function(result) {
-      that.setState({playlist_view:result.pl_view, bm_list:result.pl_playlist, bm_index:result.pl_index});
+      that.setState({playlist_view:result.pl_view});
     })
   }
 
   // needs to set state in order to re-render
-  setPlaylistView = (status) => {
-    chrome.storage.local.set({pl_view:status}, () => {
-      this.setState({playlist_view:status});
+  setPLView = (playlist_view) => {
+    chrome.storage.local.set({pl_view:playlist_view}, () => {
+      this.setState({playlist_view:playlist_view});
     })
   };
 
   render() { 
-    var contentList = this.state.playlist_view ? <BookmarkList/> : <FolderList/>;
+    var contentList = this.state.playlist_view 
+      ? <BookmarkList setPLView = {this.setPLView}/> 
+      : <FolderList setPLView = {this.setPLView}/>;
     return (
       <div>
-        <div
-          style={{
-            display:"flex",
-            width:"300px",
-          }}
-        >
-          <button onClick={() => this.setPlaylistView(false)}>Folder Selection</button>
-          <button onClick={() => this.setPlaylistView(true)}>Playlist</button>
-        </div>
-        <div>
-          {contentList}
-        </div>
+        {contentList}
       </div>
     );
   }

@@ -113,7 +113,7 @@ else if(url.match(music_regex.vimeo)) {
 /******************************************************************************************************/
 
 // Listener:
-//    handle popup.js "Play/Pause", "Volume", and "Skip" messages 
+//    handle popup.js "Play/Pause"
 
 chrome.runtime.onMessage.addListener(function(message, sender, response) {
   if(message.play_button != null) {

@@ -1,8 +1,5 @@
 /*global chrome*/
 
-// TEMPORARY: while debugging
-// chrome.storage.local.clear();
-
 /******************************************************************************************************/
 
 // Helper function:
@@ -71,8 +68,6 @@ function postLoadExec(dest_tabid, callback) {
 //    handle messages from either React components or content script listeners
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  var that = this;
-
   // message 1: NEW playlist folder has been selected, reset index etc.
   if (message.bookmarks_list != null) { 
     chrome.storage.local.set({pl_playlist:message.bookmarks_list, pl_index:0}, function() {

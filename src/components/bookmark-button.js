@@ -14,13 +14,8 @@ class BookmarkButton extends React.Component {
           alignItems: "center",
           justifyContent: "space-between",
           height:"24px",
-          // margin: "4px",
-          marginLeft: "2px",
-          // marginBottom: "2px",
           marginTop: "4px",
           width: "288px",
-          // border: "1px solid #ccc",
-          // borderRadius: "8px",
         }}
       >
         <div 

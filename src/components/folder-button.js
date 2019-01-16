@@ -2,7 +2,7 @@
 import React from 'react';
 
 // destructive: traverse bookmark tree, filling bookmarks_list with bookmarks
-// TODO: options for i.e. "only youtube videos", "no subfolders"
+// TODO: options for "no subfolders"
 function processBookmarks(node_list, bookmarks_list) { 
   node_list.children.forEach((node) => {
     if(!node.children) { 
@@ -12,6 +12,14 @@ function processBookmarks(node_list, bookmarks_list) {
       processBookmarks(node, bookmarks_list);
     }
   });
+}
+
+// 
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+  }
 }
 
 function FolderButton(props) {
@@ -26,6 +34,8 @@ function FolderButton(props) {
         function() {
           var bookmarks_list = [];
           processBookmarks(props.node, bookmarks_list);
+          if(props.shuffle) 
+            shuffleArray(bookmarks_list);
           if(!(bookmarks_list.length === 0)){
             chrome.runtime.sendMessage({bookmarks_list:bookmarks_list}, function(response) { 
               props.setPLView(true);

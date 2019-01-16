@@ -8,7 +8,8 @@ class FolderList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      folders: []
+      folders: [], 
+      shuffle: false,
     }
   }
 
@@ -31,15 +32,35 @@ class FolderList extends React.Component {
   render() {
     var that = this;
     return (
-      <div 
-        style={{
-          listStyleImage:"url(" + FolderIcon + ")"
-        }}
-      > {
-        this.state.folders.map(function(folder) {
-          return <FolderButton node={folder.node} depth={folder.depth} setPLView={that.props.setPLView}/>
-        })
-      } </div>
+      <div>
+        <div>
+          <input 
+            type="checkbox"
+            id="shuffle"
+            onChange={function() {
+              that.setState({shuffle:!that.state.shuffle});
+            }}
+          >
+          </input>
+          <label for="shuffle"> Shuffle </label>
+        </div>
+        <div 
+          style={{
+            listStyleImage:"url(" + FolderIcon + ")"
+          }}
+        > 
+          {this.state.folders.map(function(folder) {
+            return (
+              <FolderButton 
+                node={folder.node} 
+                depth={folder.depth} 
+                setPLView={that.props.setPLView}
+                shuffle={that.state.shuffle}
+              />
+            )
+          })}
+        </div>
+      </div>
     )
   }
 }

@@ -38,7 +38,7 @@ class BookmarkController extends React.Component {
           onClick = {
             function() {
               if(that.props.bm_index != null) {
-                if(that.props.bm_index+1 < that.props.bm_list.length) {
+                if(that.props.bm_index+1 < that.props.bm_length) {
                   chrome.runtime.sendMessage({bookmarks_index:that.props.bm_index+1}, function(response) {
                     that.props.editIndex(that.props.bm_index+1);
                   });

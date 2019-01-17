@@ -2,6 +2,8 @@
 import React from 'react';
 import FolderList from './folder-list.js';
 import BookmarkList from './bookmark-list.js';
+import {styles} from './styles.js'
+
 
 class Flipper extends React.Component {
   constructor(props) {
@@ -18,7 +20,6 @@ class Flipper extends React.Component {
     })
   }
 
-  // needs to set state in order to re-render
   setPLView = (playlist_view) => {
     chrome.storage.local.set({pl_view:playlist_view}, () => {
       this.setState({playlist_view:playlist_view});

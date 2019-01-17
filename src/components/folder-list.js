@@ -1,7 +1,7 @@
 /*global chrome*/
 import React from 'react';
 import FolderButton from './folder-button.js'
-import FolderIcon from '../images/folder.png'
+import {styles} from './styles.js'
 
 
 class FolderList extends React.Component {
@@ -33,7 +33,12 @@ class FolderList extends React.Component {
     var that = this;
     return (
       <div>
-        <div>
+        <div
+          style={{
+            position:"fixed",
+            right:"30px",
+          }}
+        >
           <input 
             type="checkbox"
             id="shuffle"
@@ -42,13 +47,8 @@ class FolderList extends React.Component {
             }}
           >
           </input>
-          <label for="shuffle"> Shuffle </label>
         </div>
-        <div 
-          style={{
-            listStyleImage:"url(" + FolderIcon + ")"
-          }}
-        > 
+        <div> 
           {this.state.folders.map(function(folder) {
             return (
               <FolderButton 

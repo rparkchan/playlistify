@@ -1,56 +1,28 @@
 /*global chrome*/
 import React from 'react';
+import {styles} from './styles.js'
 
 //
 //
 
-class BookmarkButton extends React.Component {
-  render() {
-    var that = this;
-    return (
+function BookmarkButton(props) {
+  return (
+    <div style={styles.BookmarkButtonContainer(props)}>
       <div 
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height:"24px",
-          marginTop: "4px",
-          width: "288px",
-        }}
-      >
-        <div 
-          onClick={
-            function() {
-              chrome.runtime.sendMessage({bookmarks_index:that.props.list_pos}, function(response) {
-                that.props.editIndex(that.props.list_pos);
-              });
-            }
+        style={styles.BookmarkButtonEntry(props)}
+        onClick={
+          function() {
+            chrome.runtime.sendMessage({bookmarks_index:props.list_pos}, function(response) {
+              props.editIndex(props.list_pos);
+            });
           }
-          style={{
-            color: that.props.current ? "red" : "black",
-            background: "url(chrome://favicon/size/16@1x/" + that.props.url + ") no-repeat", // 1x or 2x
-            backgroundPosition: "4px center",
-            border: "1px solid",
-            borderRadius: "2px",
-            paddingLeft: "24px",
-            height: "24px",
-            width: "230px",
-            lineHeight: "24px",
-            overflow: "hidden",
-          }}
-        > 
-          {that.props.title}
-        </div>
-        <button 
-          style={{
-            height: "16px",
-            width: "16px",
-          }}
-        >
-        </button>
+        }  
+      > 
+        {props.title}
       </div>
-    )
-  }
+      <button style={styles.BookmarkButtonRemove(props)}/>
+    </div>
+  )
 }
 
 export default BookmarkButton;

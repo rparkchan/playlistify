@@ -2,6 +2,8 @@
 import React from 'react';
 import BookmarkButton from './bookmark-button';
 import BookmarkController from './bookmark-controller';
+import {styles} from './styles.js'
+
 
 // i.e. needs to flip depending on if there chrome.storage.local.playlisto_bm_list
 class BookmarkList extends React.Component {
@@ -32,10 +34,8 @@ class BookmarkList extends React.Component {
     });
   }
 
-  // needs to be an arrow function to retain "this"
   editIndex = (i) => {
     this.setState({bm_index:i});
-    document.getElementById("button_container").scrollTop = 1+(28*i);
   }
 
   // this is very slow because it's redoing the map every time I think
@@ -44,7 +44,11 @@ class BookmarkList extends React.Component {
     if(that.state.bm_list != null) {
       return (
         <div>
-          <div style={{position:"fixed",top:8,left:8,height:24,width:300}}>
+          <div 
+            // style={{
+
+            // }}
+          >
             <BookmarkController 
               bm_index={that.state.bm_index}
               bm_length={that.state.bm_list.length}
@@ -60,20 +64,19 @@ class BookmarkList extends React.Component {
               height:2+(28*Math.min(that.state.bm_list.length, 16)) + "px",
               width:300,
               overflow:"auto"
-            }}> 
-            {
-              that.state.bm_list.map(function(bookmark,index) {
-                return (
-                  <BookmarkButton 
-                    title={bookmark.title} 
-                    url={bookmark.url}
-                    list_pos={index} 
-                    editIndex={that.editIndex}
-                    current={(that.state.bm_index === index) ? true : false}
-                  />
-                );
-              })
-            } 
+            }}
+          > 
+            {that.state.bm_list.map(function(bookmark,index) {
+              return (
+                <BookmarkButton 
+                  title={bookmark.title} 
+                  url={bookmark.url}
+                  list_pos={index} 
+                  editIndex={that.editIndex}
+                  current={(that.state.bm_index === index) ? true : false}
+                />
+              );
+            })} 
           </div>
         </div>
       );

@@ -6,7 +6,7 @@
       "default_popup": "index.html"
   },
   "background": {
-    "scripts": ["/static/js/background.js"]
+    "scripts": ["./static/js/background.js"]
   },
   "permissions": [
     "bookmarks", "tabs", "storage", "*://*/*", "chrome://favicon/*", "chrome://favicon/"

@@ -1,19 +1,39 @@
 /*global chrome*/
 import React from 'react';
+import {styles} from './styles.js'
+
 
 // i.e. needs to flip depending on if there chrome.storage.local.playlisto_bm_list
-class BookmarkController extends React.Component {
-  render() {
-    var that = this;
-    return (
-      <div>
+function BookmarkController(props) {
+  return (
+    <div
+      style={{
+        position:"fixed",
+        top:8,
+        left:8,
+        height:24,
+        width:288,
+        display:"flex",
+        justifyContent:"space-between",
+        alignItems:"center"
+      }}
+    >
+      <div
+        style={{
+          display:"flex",
+          width:"230px",
+        }}
+      >
         <button 
+          style={{
+            marginRight:4,
+          }}
           onClick = {
             function() {
-              if(that.props.bm_index != null) {
-                if(that.props.bm_index-1 >= 0) {
-                  chrome.runtime.sendMessage({bookmarks_index:that.props.bm_index-1}, function(response) {
-                    that.props.editIndex(that.props.bm_index-1);
+              if(props.bm_index != null) {
+                if(props.bm_index-1 >= 0) {
+                  chrome.runtime.sendMessage({bookmarks_index:props.bm_index-1}, function(response) {
+                    props.editIndex(props.bm_index-1);
                   });
                 }
               }
@@ -22,6 +42,9 @@ class BookmarkController extends React.Component {
           Prev
         </button>
         <button
+          style={{
+            marginRight:4,
+          }}
           onClick = {
             function() {
               chrome.storage.local.get(["pl_tabid"], function(result){
@@ -32,15 +55,15 @@ class BookmarkController extends React.Component {
             }
           }
         >
-          Play
+          Play/Pause
         </button>
         <button 
           onClick = {
             function() {
-              if(that.props.bm_index != null) {
-                if(that.props.bm_index+1 < that.props.bm_length) {
-                  chrome.runtime.sendMessage({bookmarks_index:that.props.bm_index+1}, function(response) {
-                    that.props.editIndex(that.props.bm_index+1);
+              if(props.bm_index != null) {
+                if(props.bm_index+1 < props.bm_length) {
+                  chrome.runtime.sendMessage({bookmarks_index:props.bm_index+1}, function(response) {
+                    props.editIndex(props.bm_index+1);
                   });
                 }
               }
@@ -48,20 +71,23 @@ class BookmarkController extends React.Component {
         }>
           Next
         </button>
-        <button
-          onClick = {
-            function() {
-              chrome.runtime.sendMessage({close_playlist:true}, function() {
-                that.props.setPLView(false); // and more
-              });
-            }
-          }
-        >
-          Close
-        </button>
       </div>
-      );
-  }
+      <button
+        style={{
+          width:16,
+          height:16
+        }}
+        onClick = {
+          function() {
+            chrome.runtime.sendMessage({close_playlist:true}, function() {
+              props.setPLView(false); // and more
+            });
+          }
+        }
+      >
+      </button>
+    </div>
+    );
 }
 
 export default BookmarkController;

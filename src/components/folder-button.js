@@ -1,5 +1,8 @@
 /*global chrome*/
 import React from 'react';
+import FolderBlue from '../images/folder2.png'
+import {styles} from './styles.js'
+
 
 // destructive: traverse bookmark tree, filling bookmarks_list with bookmarks
 // TODO: options for "no subfolders"
@@ -24,9 +27,16 @@ function shuffleArray(array) {
 
 function FolderButton(props) {
   return (
-    <li 
+    <div 
       style={{
-        paddingLeft:props.depth*12,
+        backgroundImage:"url(" + FolderBlue + ")",
+        backgroundRepeat:"no-repeat",
+        backgroundPosition:props.depth*18,
+        paddingLeft:20 + props.depth*18,
+        height:"20px",
+        lineHeight:"20px",
+        overflow:"hidden",
+        onMouseOver:() => console.log("hi")
       }}
       className="FolderButton"
       key={props.node.id}
@@ -48,7 +58,7 @@ function FolderButton(props) {
       }
     > 
       {props.node.title ? props.node.title : "ROOT"} 
-    </li>
+    </div>
   )
 }
 

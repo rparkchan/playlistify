@@ -116,9 +116,13 @@ else if(url.match(music_regex.vimeo)) {
 //    handle popup.js "Play/Pause"
 
 chrome.runtime.onMessage.addListener(function(message, sender, response) {
+  // Play/Pause
   if(message.play_button != null) {
     if(play_button[0]) {
       play_button[0].click();
     }
   }
+  
+  // Skip?
+  // videos[0].currentTime = 10;
 });

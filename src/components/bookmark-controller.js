@@ -6,28 +6,10 @@ import {styles} from './styles.js'
 // i.e. needs to flip depending on if there chrome.storage.local.playlisto_bm_list
 function BookmarkController(props) {
   return (
-    <div
-      style={{
-        position:"fixed",
-        top:8,
-        left:8,
-        height:24,
-        width:288,
-        display:"flex",
-        justifyContent:"space-between",
-        alignItems:"center"
-      }}
-    >
-      <div
-        style={{
-          display:"flex",
-          width:"230px",
-        }}
-      >
+    <div style={styles.BookmarkControllerContainer({})}>
+      <div style={{display:"flex", width:"230px",}}>
         <button 
-          style={{
-            marginRight:4,
-          }}
+          style={{marginRight:4}}
           onClick = {
             function() {
               if(props.bm_index != null) {
@@ -42,16 +24,14 @@ function BookmarkController(props) {
           Prev
         </button>
         <button
-          style={{
-            marginRight:4,
-          }}
+          style={{marginRight:4}}
           onClick = {
             function() {
               chrome.storage.local.get(["pl_tabid"], function(result){
                 if(result.pl_tabid != null) {
                   chrome.tabs.sendMessage(result.pl_tabid,{play_button:true})
                 }
-              });    
+              });
             }
           }
         >
@@ -72,11 +52,8 @@ function BookmarkController(props) {
           Next
         </button>
       </div>
-      <button
-        style={{
-          width:16,
-          height:16
-        }}
+      <button 
+        style={styles.BookmarkControllerExit({})}
         onClick = {
           function() {
             chrome.runtime.sendMessage({close_playlist:true}, function() {

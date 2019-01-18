@@ -20,7 +20,14 @@ function BookmarkButton(props) {
       > 
         {props.title}
       </div>
-      <button style={styles.BookmarkButtonRemove(props)}/>
+      <button 
+        style={styles.BookmarkButtonRemove(props)}
+        onClick= {
+          function() {
+            
+          }
+        }
+      />
     </div>
   )
 }

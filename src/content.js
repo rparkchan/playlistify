@@ -5,6 +5,9 @@
 var url = window.location.href;
 var play_button = [];
 
+// before running playNext, can do a check to see if the url is the same as stored
+// that way user is allowed to i.e. click a different youtube video, and autoplay won't trigger
+
 function playNext() {
   chrome.storage.local.get(["pl_playlist", "pl_index"], function(result) {
     var bookmarks_index = result.pl_index + 1;

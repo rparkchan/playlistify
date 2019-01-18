@@ -14,6 +14,7 @@ class BookmarkList extends React.Component {
       bm_index: null,
       bm_tab: null,
     };
+    this.contRef = React.createRef();
   }
 
   componentDidMount() {
@@ -38,17 +39,20 @@ class BookmarkList extends React.Component {
     this.setState({bm_index:i});
   }
 
+  // from https://gist.github.com/koistya/934a4e452b61017ad611
+  paneDidMount = (node) => {
+    if (node) {
+      node.addEventListener('scroll', () => console.log('scroll!'));
+    }
+  };
+
   // this is very slow because it's redoing the map every time I think
   render() {
     var that = this;
     if(that.state.bm_list != null) {
       return (
         <div>
-          <div 
-            // style={{
-
-            // }}
-          >
+          <div>
             <BookmarkController 
               bm_index={that.state.bm_index}
               bm_length={that.state.bm_list.length}
@@ -62,27 +66,35 @@ class BookmarkList extends React.Component {
               position:"fixed",
               top:32,
               height:2+(28*Math.min(that.state.bm_list.length, 16)) + "px",
-              width:300,
+              width:308, // to move the scroll bar all the way right
               overflow:"auto"
             }}
+            ref={this.paneDidMount}
           > 
             {that.state.bm_list.map(function(bookmark,index) {
-              return (
-                <BookmarkButton 
-                  title={bookmark.title} 
-                  url={bookmark.url}
-                  list_pos={index} 
-                  editIndex={that.editIndex}
-                  current={(that.state.bm_index === index) ? true : false}
-                />
-              );
+              if(index <= 20) {
+                return (
+                  <BookmarkButton 
+                    title={bookmark.title} 
+                    url={bookmark.url}
+                    list_pos={index} 
+                    editIndex={that.editIndex}
+                    current={(that.state.bm_index === index) ? true : false}
+                  />
+                );
+              }
+              else {
+                return (
+                  <div style={styles.BookmarkButtonContainer({})}/>
+                )
+              }
             })} 
           </div>
         </div>
       );
     }
     else { // i.e. while local storage hasn't yet called setState()
-      return <div/>;
+      return <div ref={this.paneDidMount}/>;
     }
   }
 }

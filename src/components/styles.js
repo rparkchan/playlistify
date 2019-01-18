@@ -1,3 +1,8 @@
+import XGray from "../images/x_gray.png";
+import XWhite from "../images/x_white.png";
+import XBlack from "../images/x_black.png";
+import XRed from "../images/x_red.png";
+
 function BookmarkButtonContainer(props) {
   return {
     display: "flex",
@@ -6,7 +11,7 @@ function BookmarkButtonContainer(props) {
     height:"24px",
     marginTop: "4px",
     width: "288px",
-  }
+  };
 }
 
 function BookmarkButtonEntry(props) {
@@ -21,13 +26,38 @@ function BookmarkButtonEntry(props) {
     width: "230px",
     lineHeight: "24px",
     overflow: "hidden",
-  }
+  };
 }
 
 function BookmarkButtonRemove(props) {
   return {
     height: "16px",
     width: "16px",
+    background: "url(" + XGray + ") no-repeat",
+    backgroundPosition: "center center",
+    border: "none",
+  };
+}
+
+function BookmarkControllerContainer(props) {
+  return {
+    position:"fixed",
+    top:8,
+    left:8,
+    height:24,
+    width:288,
+    display:"flex",
+    justifyContent:"space-between",
+    alignItems:"center"
+  };
+}
+
+function BookmarkControllerExit(props) {
+  return {
+    width:16,
+    height:16,
+    background:"url(" + XWhite + ")",
+    border:"none"
   }
 }
 
@@ -35,6 +65,8 @@ const styles = {
   BookmarkButtonContainer: BookmarkButtonContainer,
   BookmarkButtonEntry: BookmarkButtonEntry,
   BookmarkButtonRemove: BookmarkButtonRemove, 
+  BookmarkControllerContainer: BookmarkControllerContainer,
+  BookmarkControllerExit: BookmarkControllerExit,
 }
 
 export {styles};

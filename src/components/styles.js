@@ -23,6 +23,7 @@ function BookmarkButtonEntry(props) {
     background: "url(chrome://favicon/size/16@1x/" + props.url + ") no-repeat", // 1x or 2x
     backgroundPosition: "4px center",
     border: "1px solid",
+    borderColor: props.current ? "red" :  " #808080",
     borderRadius: "2px",
     paddingLeft: "24px",
     height: "24px",
@@ -51,17 +52,8 @@ function BookmarkControllerContainer(props) {
     width:288,
     display:"flex",
     justifyContent:"space-between",
-    alignItems:"center"
+    alignItems:"center",
   };
-}
-
-function BookmarkControllerExit(props) {
-  return {
-    width:16,
-    height:16,
-    background:"url(" + XWhite + ")",
-    border:"none"
-  }
 }
 
 const styles = {
@@ -69,7 +61,6 @@ const styles = {
   BookmarkButtonEntry: BookmarkButtonEntry,
   BookmarkButtonRemove: BookmarkButtonRemove, 
   BookmarkControllerContainer: BookmarkControllerContainer,
-  BookmarkControllerExit: BookmarkControllerExit,
 }
 
 export {styles};

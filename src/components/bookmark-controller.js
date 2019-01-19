@@ -1,29 +1,28 @@
 /*global chrome*/
 import React from 'react';
-import {styles} from './styles.js'
+import {styles} from './styles.js';
+import {execValidTab} from './helpers.js';
 
 // i.e. needs to flip depending on if there chrome.storage.local.playlisto_bm_list
 function BookmarkController(props) {
   return (
     <div style={styles.BookmarkControllerContainer({})}>
-      <div style={{display:"flex", width:"230px",}}>
+      <div style={{display:"flex", width:"254px", justifyContent:"space-between"}}>
         <button 
-          style={{marginRight:4}}
           onClick = {
             function() {
               if(props.bm_index != null) {
                 if(props.bm_index-1 >= 0) {
-                  chrome.runtime.sendMessage({bookmarks_index:props.bm_index-1}, function(response) {
-                    props.editIndex(props.bm_index-1);
-                  });
+                  execValidTab(props.bm_list,props.bm_index - 1);
+                  props.editIndex(props.bm_index - 1);
                 }
               }
             }
         }>
           Prev
         </button>
+
         <button
-          style={{marginRight:4}}
           onClick = {
             function() {
               chrome.storage.local.get(["pl_tabid"], function(result){
@@ -36,32 +35,50 @@ function BookmarkController(props) {
         >
           Play/Pause
         </button>
+
         <button 
           onClick = {
             function() {
               if(props.bm_index != null) {
-                if(props.bm_index+1 < props.bm_length) {
-                  chrome.runtime.sendMessage({bookmarks_index:props.bm_index+1}, function(response) {
-                    props.editIndex(props.bm_index+1);
-                  });
+                if(props.bm_index+1 < props.bm_list.length) {
+                  execValidTab(props.bm_list,props.bm_index + 1);
+                  props.editIndex(props.bm_index + 1);
                 }
               }
             }
         }>
           Next
         </button>
-      </div>
-      <button 
-        style={styles.BookmarkControllerExit({})}
-        onClick = {
-          function() {
-            chrome.runtime.sendMessage({close_playlist:true}, function() {
-              props.setPLView(false); // and more
-            });
+
+        <button
+          onClick = {
+            function() {
+              chrome.storage.local.remove(["pl_playlist", "pl_index"], function() {
+                props.setPLView(false);
+              })
+            }
           }
-        }
-      >
-      </button>
+        >
+          New
+        </button>
+
+        <button 
+          onClick = {
+            function() {
+              chrome.storage.local.get(["pl_tabid"], function(result) {
+                if(result.pl_tabid != null) {
+                  chrome.tabs.remove(result.pl_tabid, function() {
+                    chrome.storage.local.remove(["pl_tabid", "pl_windowid", "pl_index"]);
+                    props.editIndex(null);
+                  })
+                }
+              })
+            }
+          }
+        >
+          Close
+        </button>
+      </div>
     </div>
     );
 }

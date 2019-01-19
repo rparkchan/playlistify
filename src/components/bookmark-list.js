@@ -60,7 +60,7 @@ class BookmarkList extends React.Component {
           <div style={{height:24}}>
             <BookmarkController 
               bm_index={that.state.bm_index}
-              bm_length={that.state.bm_list.length}
+              bm_list={that.state.bm_list}
               editIndex={that.editIndex}
               setPLView={that.props.setPLView}
             />
@@ -69,7 +69,7 @@ class BookmarkList extends React.Component {
             id="button_container" 
             style= {{
               position:"fixed",
-              top:32,
+              top:36,
               height:(28*Math.min(that.state.bm_list.length, 12)) + "px",
               width:308, // to move the scroll bar all the way right
               overflow:"auto",

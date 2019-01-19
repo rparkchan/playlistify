@@ -3,19 +3,21 @@
 /******************************************************************************************************/
 
 var url = window.location.href;
-var play_button = [];
+var play_button = [], videos = [], audios = [];
 
 // before running playNext, can do a check to see if the url is the same as stored
-// that way user is allowed to i.e. click a different youtube video, and autoplay won't trigger
+// that way user is allowed to i.e. click a different Soundcloud video, and autoplay won't trigger
 
 function playNext() {
   chrome.storage.local.get(["pl_playlist", "pl_index"], function(result) {
-    var bookmarks_index = result.pl_index + 1;
-    if(bookmarks_index < result.pl_playlist.length) {
-      chrome.runtime.sendMessage({bookmarks_index:bookmarks_index});
-    }
-    else {
-      chrome.runtime.sendMessage({playlist_finished:true});
+    if(result.pl_playlist != null) { // can happen i.e. with "New" button
+      var bookmarks_index = result.pl_index + 1;
+      if(bookmarks_index < result.pl_playlist.length) {
+        chrome.runtime.sendMessage({bookmarks_index:bookmarks_index});
+      }
+      else {
+        chrome.runtime.sendMessage({playlist_finished:true});
+      }
     }
   });
 }
@@ -34,7 +36,7 @@ if(url.match(music_regex.youtube)) {
   play_button = document.getElementsByClassName("ytp-play-button ytp-button");
   
   // listen for end of video
-  var videos = document.getElementsByTagName('video');
+  videos = document.getElementsByTagName('video');
   if(videos.length > 0) { 
     videos[0].addEventListener('ended',function() {
       playNext();
@@ -57,7 +59,7 @@ else if(url.match(music_regex.bandcamp)) {
   }
 
   // listen for end of audio
-  var audios = document.getElementsByTagName('audio');
+  audios = document.getElementsByTagName('audio');
   if(audios.length > 0) { 
     audios[0].addEventListener('ended',function() {
       playNext();
@@ -102,7 +104,7 @@ else if(url.match(music_regex.vimeo)) {
   }
 
   // listen for end of audio
-  var videos = document.getElementsByTagName('video');
+  videos = document.getElementsByTagName('video');
   if(videos.length > 0) { 
     videos[0].addEventListener('ended',function() {
       playNext();

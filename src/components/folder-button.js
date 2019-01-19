@@ -47,9 +47,9 @@ function FolderButton(props) {
           if(props.shuffle) 
             shuffleArray(bookmarks_list);
           if(!(bookmarks_list.length === 0)){
-            chrome.runtime.sendMessage({bookmarks_list:bookmarks_list}, function(response) { 
+            chrome.storage.local.set({pl_playlist:bookmarks_list}, function() {
               props.setPLView(true);
-            });
+            })
           }
           else {
             alert("There are no bookmarks in this folder!");

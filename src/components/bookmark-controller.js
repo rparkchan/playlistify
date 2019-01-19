@@ -2,7 +2,6 @@
 import React from 'react';
 import {styles} from './styles.js'
 
-
 // i.e. needs to flip depending on if there chrome.storage.local.playlisto_bm_list
 function BookmarkController(props) {
   return (

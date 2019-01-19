@@ -13,6 +13,7 @@ class BookmarkList extends React.Component {
       bm_list: null,
       bm_index: null,
       bm_tab: null,
+      view_index:0,
     };
     this.contRef = React.createRef();
   }
@@ -23,8 +24,8 @@ class BookmarkList extends React.Component {
     chrome.storage.local.get(["pl_playlist", "pl_index", "pl_tab", "pl_dumbo"], function(result) {
       that.setState({bm_list:result.pl_playlist, bm_index:result.pl_index, bm_tab:result.pl_tab});
       if(result.pl_playlist != null) {
-        document.getElementById('root').style.height = 24+28*Math.min(result.pl_playlist.length, 16) + "px";
-        document.getElementById("button_container").scrollTop = 1+(28*result.pl_index);
+        document.getElementById('root').style.height = 24+28*Math.min(result.pl_playlist.length, 12) + "px";
+        document.getElementById("button_container").scrollTop = (28*result.pl_index);
       }
     });
     // listener for content.js autoplay, only applicable when popup open AND content.js autoplays
@@ -39,10 +40,14 @@ class BookmarkList extends React.Component {
     this.setState({bm_index:i});
   }
 
-  // from https://gist.github.com/koistya/934a4e452b61017ad611
+  // make sure we're setting state.view_index everywhere it needs to be set
+  // does scroll happen automatically after content.js call?
   paneDidMount = (node) => {
+    var that=this;
     if (node) {
-      node.addEventListener('scroll', () => console.log('scroll!'));
+      node.addEventListener('scroll', function(){
+        that.setState({view_index:Math.floor(node.scrollTop / 28.)});
+      });
     }
   };
 
@@ -52,7 +57,7 @@ class BookmarkList extends React.Component {
     if(that.state.bm_list != null) {
       return (
         <div>
-          <div>
+          <div style={{height:24}}>
             <BookmarkController 
               bm_index={that.state.bm_index}
               bm_length={that.state.bm_list.length}
@@ -65,14 +70,14 @@ class BookmarkList extends React.Component {
             style= {{
               position:"fixed",
               top:32,
-              height:2+(28*Math.min(that.state.bm_list.length, 16)) + "px",
+              height:(28*Math.min(that.state.bm_list.length, 12)) + "px",
               width:308, // to move the scroll bar all the way right
-              overflow:"auto"
+              overflow:"auto",
             }}
             ref={this.paneDidMount}
           > 
             {that.state.bm_list.map(function(bookmark,index) {
-              if(index <= 20) {
+              if(index >= that.state.view_index - 4 && index <= that.state.view_index + 16) {
                 return (
                   <BookmarkButton 
                     title={bookmark.title} 

@@ -9,7 +9,10 @@ function BookmarkButtonContainer(props) {
     alignItems: "center",
     justifyContent: "space-between",
     height:"24px",
-    marginTop: "4px",
+    // marginTop: props.list_pos==0 ? 4 : 0,
+    // marginBottom: 4,
+    paddingBottom: 2,
+    paddingTop: 2,
     width: "288px",
   };
 }

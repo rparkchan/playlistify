@@ -29,13 +29,18 @@ function execValidTab(bm_list, bm_index, callback) {
 //    create a new tab (optionally, new window) to begin playing bm_list at bm_index
 
 function newPlaylistTab(bm_list, bm_index, callback) {
-  chrome.tabs.create({url:bm_list[bm_index].url, active:true}, function (tab) {
-    chrome.windows.create({tabId: tab.id}, function(ic_window) {
-      chrome.storage.local.set({pl_tabid:tab.id,pl_windowid:ic_window.id}, function () { 
-        postLoadExec(tab.id, callback);
+  // chrome.tabs.create({url:bm_list[bm_index].url, active:true}, function (tab) {
+  //   chrome.windows.create({tabId: tab.id}, function(ic_window) {
+  //     chrome.storage.local.set({pl_tabid:tab.id,pl_windowid:ic_window.id}, function () { 
+  //       postLoadExec(tab.id, callback);
+  //     });
+  //   });
+  // });
+    chrome.windows.create({url:bm_list[bm_index].url, type:"popup"}, function(ic_window) {
+      chrome.storage.local.set({pl_tabid:ic_window.tabs[0].id,pl_windowid:ic_window.id}, function () { 
+        postLoadExec(ic_window.tabs[0].id, callback);
       });
     });
-  });
 }
 
 // Helper function:

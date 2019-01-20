@@ -1,9 +1,7 @@
 /*global chrome*/
 import React from 'react';
 import {styles} from './styles.js';
-import {execValidTab} from './helpers.js';
 
-// i.e. needs to flip depending on if there chrome.storage.local.playlisto_bm_list
 function BookmarkController(props) {
   return (
     <div style={styles.BookmarkControllerContainer({})}>
@@ -13,8 +11,9 @@ function BookmarkController(props) {
             function() {
               if(props.bm_index != null) {
                 if(props.bm_index-1 >= 0) {
-                  execValidTab(props.bm_list,props.bm_index - 1);
-                  props.editIndex(props.bm_index - 1);
+                  chrome.runtime.sendMessage({bookmarks_index:props.bm_index-1}, function(response) {
+                    props.editIndex(props.bm_index-1);
+                  });
                 }
               }
             }
@@ -41,8 +40,9 @@ function BookmarkController(props) {
             function() {
               if(props.bm_index != null) {
                 if(props.bm_index+1 < props.bm_list.length) {
-                  execValidTab(props.bm_list,props.bm_index + 1);
-                  props.editIndex(props.bm_index + 1);
+                  chrome.runtime.sendMessage({bookmarks_index:props.bm_index+1}, function(response) {
+                    props.editIndex(props.bm_index+1);
+                  });
                 }
               }
             }

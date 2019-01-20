@@ -1,7 +1,6 @@
 /*global chrome*/
 import React from 'react';
 import {styles} from './styles.js';
-import {execValidTab} from './helpers.js';
 
 //
 //
@@ -13,8 +12,7 @@ function BookmarkButton(props) {
         style={styles.BookmarkButtonEntry(props)}
         onClick={
           function() {
-            chrome.storage.local.get(["pl_index","pl_playlist"], function(result) {
-              execValidTab(result.pl_playlist, props.list_pos);
+            chrome.runtime.sendMessage({bookmarks_index:props.list_pos}, function(response) {
               props.editIndex(props.list_pos);
             });
           }

@@ -1,5 +1,7 @@
 /*global chrome*/
 
+console.log("content script beginning");
+
 /******************************************************************************************************/
 
 var url = window.location.href;
@@ -9,11 +11,12 @@ var play_button = [], videos = [], audios = [];
 // that way user is allowed to i.e. click a different Soundcloud video, and autoplay won't trigger
 
 function playNext() {
+  console.log("playing next!");
   chrome.storage.local.get(["pl_playlist", "pl_index"], function(result) {
     if(result.pl_playlist != null) { // can happen i.e. with "New" button
-      var bookmarks_index = result.pl_index + 1;
-      if(bookmarks_index < result.pl_playlist.length) {
-        chrome.runtime.sendMessage({bookmarks_index:bookmarks_index});
+      var next_index = result.pl_index + 1;
+      if(next_index < result.pl_playlist.length) {
+        chrome.runtime.sendMessage({bookmarks_index:next_index});
       }
       else {
         chrome.runtime.sendMessage({playlist_finished:true});
@@ -38,8 +41,9 @@ if(url.match(music_regex.youtube)) {
   // listen for end of video
   videos = document.getElementsByTagName('video');
   if(videos.length > 0) { 
-    videos[0].addEventListener('ended',function() {
+    videos[0].addEventListener('ended',function pn() {
       playNext();
+      videos[0].removeEventListener('ended', pn);
     });
   }
   else {
@@ -124,6 +128,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, response) {
   // Play/Pause
   if(message.play_button != null) {
     if(play_button[0]) {
+      console.log("clicking");
       play_button[0].click();
     }
   }

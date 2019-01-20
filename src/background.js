@@ -25,7 +25,7 @@ function execValidTab(bm_list, bm_index, into) {
       });
     }
     else {
-      console.log("exec3");
+      console.log("exec4");
       newPlaylistTab(bm_list,bm_index, into);
     }
   }); 

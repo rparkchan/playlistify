@@ -26,68 +26,70 @@ class BookmarkController extends React.Component {
   render() {
     return (
       <div style={styles.BookmarkControllerContainer({})}>
-        <button 
-          style={styles.BookmarkControllerButton({})}
-          onClick = {
-            () => {
-              chrome.storage.local.remove(["pl_playlist", "pl_index"], () => {
-                this.props.setPLView(false);
-              })
+        <div style={{width:254, display:"flex"}}>
+          <button 
+            style={styles.BookmarkControllerButton({})}
+            onClick = {
+              () => {
+                chrome.storage.local.remove(["pl_playlist", "pl_index"], () => {
+                  this.props.setPLView(false);
+                })
+              }
             }
-          }
-        >
-          &#x021AB; Back
-        </button>
+          >
+            &#x021AB; Back
+          </button>
 
-        <button
-          style={styles.BookmarkControllerButton({})}
-          onClick = {
-            () => {
-              chrome.storage.local.get(["pl_tabid"], function(result){
-                if(result.pl_tabid != null) {
-                  chrome.tabs.sendMessage(result.pl_tabid,{play_button:true})
-                }
-              });
+          <button
+            style={styles.BookmarkControllerButton({})}
+            onClick = {
+              () => {
+                chrome.storage.local.get(["pl_tabid"], function(result){
+                  if(result.pl_tabid != null) {
+                    chrome.tabs.sendMessage(result.pl_tabid,{play_button:true})
+                  }
+                });
+              }
             }
-          }
-        >
-          Play/Pause
-        </button>
+          >
+            Play/Pause
+          </button>
 
-        <button
-          style={styles.BookmarkControllerButton({})}
-          onClick = {
-            () => {
-              this.props.shufflePlaylist();
+          <button
+            style={styles.BookmarkControllerButton({})}
+            onClick = {
+              () => {
+                this.props.shufflePlaylist();
+              }
             }
-          }
-        >
-          Shuffle
-        </button>
+          >
+            Shuffle
+          </button>
 
-        <button
-          style = {{...styles.BookmarkControllerButton({}), ...{
-            backgroundColor:this.state.musmode ? "red" : "white",
-          }}}
-          onClick = {
-            () => {
-              this.setState({musmode:!this.state.musmode}, () => {
-                chrome.storage.local.set({pl_musmode:this.state.musmode});
-              });
+          <button
+            style = {{
+              ...styles.BookmarkControllerButton({}), 
+              ...{backgroundColor:this.state.musmode ? "red" : "white"}
+            }}
+            onClick = {
+              () => {
+                this.setState({musmode:!this.state.musmode}, () => {
+                  chrome.storage.local.set({pl_musmode:this.state.musmode});
+                });
+              }
             }
-          }
-        >
-          &#x0266A; Mode
-        </button>
+          >
+            &#x0266A; Mode
+          </button>
+        </div>
 
         <button 
           style={{
             background:"url(" + XBlack + ") no-repeat",
             backgroundPosition:"center center",
-            marginLeft:22,
-            border:"none",
             height:16,
             width:16,
+            border:"none",
           }}
           onClick = {
             () => {

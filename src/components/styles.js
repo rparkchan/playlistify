@@ -54,6 +54,7 @@ function BookmarkControllerContainer(props) {
     width:288,
     display:"flex",
     alignItems:"center",
+    justifyContent:"space-between",
   };
 }
 

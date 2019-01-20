@@ -1,3 +1,11 @@
 #root {
   width: 300px;
 }
+
+button:focus {
+  outline:0;
+}
+
+button:active {
+  background-color:#cce6ff;
+}

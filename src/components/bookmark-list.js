@@ -21,8 +21,8 @@ class BookmarkList extends React.Component {
   componentDidMount() {
     var that = this;
     // load data from storage and change root div height
-    chrome.storage.local.get(["pl_playlist", "pl_index", "pl_tab", "pl_dumbo"], function(result) {
-      that.setState({bm_list:result.pl_playlist, bm_index:result.pl_index, bm_tab:result.pl_tab});
+    chrome.storage.local.get(["pl_playlist", "pl_index", "pl_tabid", "pl_dumbo"], function(result) {
+      that.setState({bm_list:result.pl_playlist, bm_index:result.pl_index, bm_tab:result.pl_tabid});
       if(result.pl_playlist != null) {
         document.getElementById('root').style.height = 24+28*Math.min(result.pl_playlist.length, 12) + "px";
         document.getElementById("button_container").scrollTop = (28*result.pl_index);
@@ -30,9 +30,11 @@ class BookmarkList extends React.Component {
     });
     // listener for content.js autoplay, only applicable when popup open AND content.js autoplays
     chrome.runtime.onMessage.addListener(function(message, sender, response) {
-      if(message.bookmarks_index != null) {
-        that.editIndex(message.bookmarks_index);
-      }
+      chrome.storage.local.get(["pl_tabid"], function(result) {
+        if(result.pl_tabid != null && result.pl_tabid == sender.tab.id && message.bookmarks_index != null) {
+          that.editIndex(message.bookmarks_index);
+        }
+      })
     });
   }
 

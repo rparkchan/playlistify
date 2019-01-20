@@ -8,6 +8,16 @@
   "background": {
     "scripts": ["./static/js/background.js"]
   },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*", 
+                  "*://soundcloud.com/*/*",
+                  "*://vimeo.com/*",
+                  "*://*.bandcamp.com/*/*"],
+      "run_at": "document_idle",
+      "js": ["./static/js/content.js"]
+    }
+  ],
   "permissions": [
     "bookmarks", "tabs", "storage", "*://*/*", "chrome://favicon/*", "chrome://favicon/"
   ],

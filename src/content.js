@@ -1,18 +1,19 @@
 /*global chrome*/
 
-console.log("content script beginning");
-
-/******************************************************************************************************/
-
+var music_regex = {
+  youtube: /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/,
+  bandcamp: /((https?:\/\/(www\.)?(.*\.bandcamp\.com\/track\/.*|.*\.bandcamp\.com\/album\/.*)))/i,
+  soundcloud: /((https?:\/\/(www\.)?(.*soundcloud\.com\/.*\/.*|.*soundcloud\.com\/.*\/.*\/.*)))/i,
+  vimeo: /((https?:\/\/(www\.)?(vimeo\.com\/.*)))/i
+}
 var url = window.location.href;
 var play_button = [], videos = [], audios = [];
-
-// before running playNext, can do a check to see if the url is the same as stored
-// that way user is allowed to i.e. click a different Soundcloud video, and autoplay won't trigger
 
 function playNext() {
   console.log("playing next!");
   chrome.storage.local.get(["pl_playlist", "pl_index"], function(result) {
+    console.log(result.pl_playlist);
+    console.log(result.pl_index);
     if(result.pl_playlist != null) { // can happen i.e. with "New" button
       var next_index = result.pl_index + 1;
       if(next_index < result.pl_playlist.length) {
@@ -23,13 +24,6 @@ function playNext() {
       }
     }
   });
-}
-
-var music_regex = {
-  youtube: /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/,
-  bandcamp: /((https?:\/\/(www\.)?(.*\.bandcamp\.com\/track\/.*|.*\.bandcamp\.com\/album\/.*)))/i,
-  soundcloud: /((https?:\/\/(www\.)?(.*soundcloud\.com\/.*\/.*|.*soundcloud\.com\/.*\/.*\/.*)))/i,
-  vimeo: /((https?:\/\/(www\.)?(vimeo\.com\/.*)))/i
 }
 
 // YouTube
@@ -128,7 +122,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, response) {
   // Play/Pause
   if(message.play_button != null) {
     if(play_button[0]) {
-      console.log("clicking");
       play_button[0].click();
     }
   }

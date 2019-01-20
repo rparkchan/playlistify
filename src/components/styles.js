@@ -20,16 +20,18 @@ function BookmarkButtonContainer(props) {
 function BookmarkButtonEntry(props) {
   return {
     color: props.current ? "red" : "black",
-    background: "url(chrome://favicon/size/16@1x/" + props.url + ") no-repeat", // 1x or 2x
-    backgroundPosition: "4px center",
+    // background: "url(chrome://favicon/size/16@1x/" + props.url + ") no-repeat", // 1x or 2x
+    // backgroundPosition: "4px center",
     border: "1px solid",
     borderColor: props.current ? "red" :  " #808080",
     borderRadius: "2px",
-    paddingLeft: "24px",
+    // paddingLeft: "24px",
     height: "24px",
-    width: "230px",
+    width: "254px",
     lineHeight: "24px",
     overflow: "hidden",
+    display: "flex",
+    alignItems: "center",
   };
 }
 
@@ -51,7 +53,6 @@ function BookmarkControllerContainer(props) {
     height:24,
     width:288,
     display:"flex",
-    justifyContent:"space-between",
     alignItems:"center",
   };
 }

@@ -5,7 +5,7 @@
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   if(message.bookmarks_index != null) {
-    chrome.storage.local.get(['pl_tabid', 'pl_playlist'], function(result) {
+    chrome.storage.local.get(['pl_tabid', 'pl_playlist', 'pl_mode'], function(result) {
       // update current tab if it exists AND message comes either from playlist tab or popup.js
       if(result.pl_tabid != null) {
         if((sender.tab != null && sender.tab.id == result.pl_tabid) || sender.tab == null) {

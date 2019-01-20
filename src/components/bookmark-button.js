@@ -18,7 +18,10 @@ function BookmarkButton(props) {
           }
         }  
       > 
-        {props.title}
+        <img style={{marginLeft:4, marginRight:4}} src={"chrome://favicon/size/16@1x/" + props.url}/>
+        <div style={{height:24, overflow:"hidden"}}>
+          {props.title}
+        </div>
       </div>
       <button 
         style={styles.BookmarkButtonRemove(props)}

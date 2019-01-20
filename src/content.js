@@ -10,10 +10,7 @@ var url = window.location.href;
 var play_button = [], videos = [], audios = [];
 
 function playNext() {
-  console.log("playing next!");
   chrome.storage.local.get(["pl_playlist", "pl_index"], function(result) {
-    console.log(result.pl_playlist);
-    console.log(result.pl_index);
     if(result.pl_playlist != null) { // can happen i.e. with "New" button
       var next_index = result.pl_index + 1;
       if(next_index < result.pl_playlist.length) {
@@ -125,7 +122,4 @@ chrome.runtime.onMessage.addListener(function(message, sender, response) {
       play_button[0].click();
     }
   }
-  
-  // Skip?
-  // videos[0].currentTime = 10;
 });

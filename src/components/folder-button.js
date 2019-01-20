@@ -17,14 +17,6 @@ function processBookmarks(node_list, bookmarks_list) {
   });
 }
 
-// 
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
 function FolderButton(props) {
   return (
     <div 
@@ -44,8 +36,6 @@ function FolderButton(props) {
         function() {
           var bookmarks_list = [];
           processBookmarks(props.node, bookmarks_list);
-          if(props.shuffle) 
-            shuffleArray(bookmarks_list);
           if(!(bookmarks_list.length === 0)){
             chrome.storage.local.set({pl_playlist:bookmarks_list}, function() {
               props.setPLView(true);

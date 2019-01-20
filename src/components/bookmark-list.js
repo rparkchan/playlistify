@@ -25,7 +25,7 @@ class BookmarkList extends React.Component {
       that.setState({bm_list:result.pl_playlist, bm_index:result.pl_index, bm_tab:result.pl_tabid});
       if(result.pl_playlist != null) {
         document.getElementById('root').style.height = 24+28*Math.min(result.pl_playlist.length, 12) + "px";
-        document.getElementById("button_container").scrollTop = (28*result.pl_index);
+        document.getElementById("button_container").scrollTop = (28*Math.max(result.pl_index-2,0));
       }
     });
     // listener for content.js autoplay, only applicable when popup open AND content.js autoplays
@@ -41,9 +41,21 @@ class BookmarkList extends React.Component {
   editIndex = (i) => {
     this.setState({bm_index:i});
   }
+  
+  // shuffle the playlist but keep the current index song intact (if it exists)
+  shufflePlaylist = () => {
+    var shuffled = this.state.bm_list.slice();
+    for (var i = shuffled.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      if(i != this.state.bm_index && j != this.state.bm_index)
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    chrome.storage.local.set({pl_playlist:shuffled}, () => {
+      this.setState({bm_list:shuffled});
+    });
+  }
 
-  // make sure we're setting state.view_index everywhere it needs to be set
-  // does scroll happen automatically after content.js call?
+  // store view_index as topmost element in playlist view
   paneDidMount = (node) => {
     var that=this;
     if (node) {
@@ -65,6 +77,7 @@ class BookmarkList extends React.Component {
               bm_list={that.state.bm_list}
               editIndex={that.editIndex}
               setPLView={that.props.setPLView}
+              shufflePlaylist={that.shufflePlaylist}
             />
           </div>
           <div 

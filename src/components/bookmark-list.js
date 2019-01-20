@@ -15,7 +15,6 @@ class BookmarkList extends React.Component {
       bm_tab: null,
       view_index:0,
     };
-    this.contRef = React.createRef();
   }
 
   componentDidMount() {
@@ -92,7 +91,7 @@ class BookmarkList extends React.Component {
             ref={this.paneDidMount}
           > 
             {that.state.bm_list.map(function(bookmark,index) {
-              if(index >= that.state.view_index - 4 && index <= that.state.view_index + 16) {
+              if(index >= that.state.view_index - 6 && index <= that.state.view_index + 18) {
                 return (
                   <BookmarkButton 
                     title={bookmark.title} 

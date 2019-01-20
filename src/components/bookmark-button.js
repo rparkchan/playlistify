@@ -27,7 +27,7 @@ function BookmarkButton(props) {
         style={styles.BookmarkButtonRemove(props)}
         onClick= {
           function() {
-            
+            // TODO
           }
         }
       />

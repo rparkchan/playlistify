@@ -30,8 +30,8 @@ class BookmarkList extends React.Component {
     // listener for content.js autoplay, only applicable when popup open AND content.js autoplays
     chrome.runtime.onMessage.addListener(function(message, sender, response) {
       chrome.storage.local.get(["pl_tabid"], function(result) {
-        if(result.pl_tabid != null && result.pl_tabid == sender.tab.id && message.bookmarks_index != null) {
-          that.editIndex(message.bookmarks_index);
+        if(result.pl_tabid != null && result.pl_tabid == sender.tab.id && message.new_index != null) {
+          that.editIndex(message.new_index);
         }
       })
     });

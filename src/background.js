@@ -4,30 +4,27 @@
 //    handle messages from either React components or content.js listeners
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  if(message.bookmarks_index != null) {
+  // message handler for index updating
+  if(message.new_index != null) {
     chrome.storage.local.get(['pl_tabid', 'pl_playlist', 'pl_musmode'], function(result) {
-      // update current tab if it exists AND message comes either from playlist tab or popup.js
-      if(result.pl_tabid != null) {
+      if(result.pl_tabid != null) { // update current tab if message comes either from playlist tab or popup.js
         if((sender.tab != null && sender.tab.id == result.pl_tabid) || sender.tab == null) {
-          chrome.tabs.update(result.pl_tabid, {url:result.pl_playlist[message.bookmarks_index].url}, function() {
-            chrome.storage.local.set({pl_index:message.bookmarks_index});
+          chrome.tabs.update(result.pl_tabid, {url:result.pl_playlist[message.new_index].url}, function() {
+            chrome.storage.local.set({pl_index:message.new_index});
           })
         }
       }
-      // create new tab if there isn't currently one
-      else {
-        // new window in music mode
-        if(result.pl_musmode) {
-          chrome.windows.create({url:result.pl_playlist[message.bookmarks_index].url, type:"popup"}, function(ic_window) {
+      else { // create new tab if there isn't currently one
+        if(result.pl_musmode) { // new window in music mode
+          chrome.windows.create({url:result.pl_playlist[message.new_index].url, type:"popup"}, function(ic_window) {
             chrome.storage.local.set({pl_tabid:ic_window.tabs[0].id,
                                       pl_windowid:ic_window.id,
-                                      pl_index:message.bookmarks_index,});
+                                      pl_index:message.new_index,});
           });     
         }
-        // new tab otherwise
-        else {
-          chrome.tabs.create({url:result.pl_playlist[message.bookmarks_index].url}, function(tab) {
-            chrome.storage.local.set({pl_tabid:tab.id, pl_index:message.bookmarks_index});
+        else { // new tab otherwise
+          chrome.tabs.create({url:result.pl_playlist[message.new_index].url}, function(tab) {
+            chrome.storage.local.set({pl_tabid:tab.id, pl_index:message.new_index});
           })
         }
       }

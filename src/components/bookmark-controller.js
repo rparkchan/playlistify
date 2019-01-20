@@ -14,10 +14,10 @@ class BookmarkController extends React.Component {
   componentDidMount() {
     chrome.storage.local.get(['pl_musmode'], (result) => {
       if(result.pl_musmode != null) {
-        this.setState({tabmode:result.pl_musmode})
+        console.log(result.pl_musmode);
+        this.setState({musmode:result.pl_musmode})
       }
       else { // should only be the very first time
-        console.log("first time here?");
         chrome.storage.local.set({pl_musmode:false});
       }
     })
@@ -27,7 +27,7 @@ class BookmarkController extends React.Component {
     return (
       <div style={styles.BookmarkControllerContainer({})}>
         <button 
-          style={{marginRight:4,}}
+          style={styles.BookmarkControllerButton({})}
           onClick = {
             () => {
               chrome.storage.local.remove(["pl_playlist", "pl_index"], () => {
@@ -40,9 +40,7 @@ class BookmarkController extends React.Component {
         </button>
 
         <button
-          style = {{
-            marginRight:4,
-          }}
+          style={styles.BookmarkControllerButton({})}
           onClick = {
             () => {
               chrome.storage.local.get(["pl_tabid"], function(result){
@@ -57,9 +55,7 @@ class BookmarkController extends React.Component {
         </button>
 
         <button
-          style = {{
-            marginRight:4,
-          }}
+          style={styles.BookmarkControllerButton({})}
           onClick = {
             () => {
               this.props.shufflePlaylist();
@@ -70,16 +66,14 @@ class BookmarkController extends React.Component {
         </button>
 
         <button
-          style = {{
+          style = {{...styles.BookmarkControllerButton({}), ...{
             backgroundColor:this.state.musmode ? "red" : "white",
-            height:18,
-            lineHeight:0,
-          }}
+          }}}
           onClick = {
             () => {
-              chrome.storage.local.set({pl_musmode:!this.state.musmode}, () => {
-                this.setState({musmode:!this.state.musmode});
-              })
+              this.setState({musmode:!this.state.musmode}, () => {
+                chrome.storage.local.set({pl_musmode:this.state.musmode});
+              });
             }
           }
         >

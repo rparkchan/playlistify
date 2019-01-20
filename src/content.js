@@ -14,7 +14,7 @@ function playNext() {
     if(result.pl_playlist != null) { // can happen i.e. with "New" button
       var next_index = result.pl_index + 1;
       if(next_index < result.pl_playlist.length) {
-        chrome.runtime.sendMessage({bookmarks_index:next_index});
+        chrome.runtime.sendMessage({new_index:next_index});
       }
       else {
         chrome.runtime.sendMessage({playlist_finished:true});
@@ -50,7 +50,13 @@ else if(url.match(music_regex.bandcamp)) {
   if(play_button[0]) {
     if(play_button[0].className == "playbutton") {
       play_button[0].click();
-    }
+    }  
+    setTimeout(() => { // occasionally Bandcamp needs an extra push
+      play_button = document.getElementsByClassName('playbutton');
+      if(play_button[0].className == "playbutton") {
+        play_button[0].click();
+      }      
+    }, 500)
   }
 
   // listen for end of audio

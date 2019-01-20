@@ -57,11 +57,22 @@ function BookmarkControllerContainer(props) {
   };
 }
 
+function BookmarkControllerButton(props) {
+  return {
+    marginRight:3,
+    border:"1px outset #d9d9d9",
+    borderRadius:"4px",
+    height:18,
+    lineHeight:0,
+  }
+}
+
 const styles = {
   BookmarkButtonContainer: BookmarkButtonContainer,
   BookmarkButtonEntry: BookmarkButtonEntry,
   BookmarkButtonRemove: BookmarkButtonRemove, 
   BookmarkControllerContainer: BookmarkControllerContainer,
+  BookmarkControllerButton: BookmarkControllerButton,
 }
 
 export {styles};

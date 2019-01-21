@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-import Flipper from './components/flipper.js';
+import ViewManager from './components/view-manager.js';
 
 ReactDOM.render(
-  <Flipper />,
+  <ViewManager />,
   document.getElementById('root') 
 );

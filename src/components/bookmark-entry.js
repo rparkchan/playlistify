@@ -5,8 +5,8 @@ import {styles} from './styles.js';
 
 /** 
  * BookmarkEntry:
- *    A horizontal entry in a BookmarkList: contains a clickable image/title to 
- *    change index and a button to remove the element from the list.
+ *   An entry in a BookmarkList: contains a clickable image/title to change index 
+ *   and a button to remove the element from the list.
  */
 
 function BookmarkEntry(props) {
@@ -28,9 +28,7 @@ function BookmarkEntry(props) {
       <button 
         style={styles.BookmarkEntryRemove(props)}
         onClick= {() => {
-          if(!props.current) {
-            props.removeElement(props.list_pos);
-          }
+          props.removeElement(props.list_pos);
         }}
       />
     </div>

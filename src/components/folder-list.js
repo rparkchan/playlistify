@@ -1,8 +1,12 @@
 /*global chrome*/
+
 import React from 'react';
 import FolderButton from './folder-button.js'
-import {styles} from './styles.js'
 
+/** 
+ * FolderList
+ *   Contains a div of multiple FolderButton's
+ */
 
 class FolderList extends React.Component {
   constructor(props) {
@@ -29,16 +33,15 @@ class FolderList extends React.Component {
   }
 
   render() {
-    var that = this;
     return (
       <div> 
-        {this.state.folders.map(function(folder) {
+        {this.state.folders.map((folder) => {
           return (
             <FolderButton 
               node={folder.node} 
               depth={folder.depth} 
-              setPLView={that.props.setPLView}
-              shuffle={that.state.shuffle}
+              setPLView={this.props.setPLView}
+              shuffle={this.state.shuffle}
             />
           )
         })}

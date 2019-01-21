@@ -1,45 +1,47 @@
 /*global chrome*/
 
-// Listener:
-//    handle messages from either React components or content.js listeners
+// called upon new_index message
+function handleNewIndex(message, sender) {
+  let fetch_vars = ['pl_tabid', 'pl_playlist', 'pl_musmode'];
+  chrome.storage.local.get(fetch_vars, (result) => {
+    let new_url = result.pl_playlist[message.new_index].url;
+    if(result.pl_tabid != null) { 
+      let active_tab = sender.tab!=null && sender.tab.id==result.pl_tabid;
+      if((active_tab && result.pl_musmode) || sender.tab == null) {
+        chrome.tabs.update(result.pl_tabid, {url:new_url}, () => {
+          chrome.storage.local.set({pl_index:message.new_index});
+        })
+      }
+    }
+    else { 
+      if(result.pl_musmode) {
+        chrome.windows.create({url:new_url, type:"popup"}, (ic_window) => {
+          chrome.storage.local.set({pl_tabid:ic_window.tabs[0].id,
+                                    pl_windowid:ic_window.id,
+                                    pl_index:message.new_index,});
+        });     
+      }
+      else {
+        chrome.tabs.create({url:new_url}, (tab) => {
+          chrome.storage.local.set({pl_tabid:tab.id, pl_index:message.new_index});
+        })
+      }
+    }
+  })
+}
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  // message handler for index updating
+// listen for index changes from content.js or components
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if(message.new_index != null) {
-    chrome.storage.local.get(['pl_tabid', 'pl_playlist', 'pl_musmode'], function(result) {
-      if(result.pl_tabid != null) { // update current tab if message comes either from playlist tab or popup.js
-        if((sender.tab != null && sender.tab.id == result.pl_tabid) || sender.tab == null) {
-          chrome.tabs.update(result.pl_tabid, {url:result.pl_playlist[message.new_index].url}, function() {
-            chrome.storage.local.set({pl_index:message.new_index});
-          })
-        }
-      }
-      else { // create new tab if there isn't currently one
-        if(result.pl_musmode) { // new window in music mode
-          chrome.windows.create({url:result.pl_playlist[message.new_index].url, type:"popup"}, function(ic_window) {
-            chrome.storage.local.set({pl_tabid:ic_window.tabs[0].id,
-                                      pl_windowid:ic_window.id,
-                                      pl_index:message.new_index,});
-          });     
-        }
-        else { // new tab otherwise
-          chrome.tabs.create({url:result.pl_playlist[message.new_index].url}, function(tab) {
-            chrome.storage.local.set({pl_tabid:tab.id, pl_index:message.new_index});
-          })
-        }
-      }
-    })
+    handleNewIndex(message,sender);
   }
 });
 
-// Listener:
-//    reset pl_tabid in local storage if the current playlist tab is closed
-
-chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
-  chrome.storage.local.get(['pl_tabid'], function (result) {
+// listen for tab closing
+chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+  chrome.storage.local.get(['pl_tabid'], (result) => {
     if(result.pl_tabid == tabId) {
-      chrome.storage.local.remove(['pl_tabid', 'pl_index'], function () {
-      })
+      chrome.storage.local.remove(['pl_tabid', 'pl_index']);
     }
   })
 })

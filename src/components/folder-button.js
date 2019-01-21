@@ -1,11 +1,41 @@
 /*global chrome*/
-import React from 'react';
-import FolderBlue from '../images/folder2.png'
-import {styles} from './styles.js'
 
+import React from 'react';
+import {styles} from './styles.js'
+import Folder from '../images/opened_folder.png'
+
+/** 
+ * FolderButton:
+ *   A button in a FolderList: when clicked, sets the ViewManager state and
+ *   loads a new (non-empty) playlist into storage
+ */
+
+function FolderButton(props) {
+  return (
+    <div style={styles.FolderButtonContainer({})}>
+      <img style={styles.FolderButtonIcon(props)} src={Folder}/>
+      <div 
+        style={styles.FolderButtonTitle({})}
+        onClick={() => {
+          var bookmarks_list = [];
+          processBookmarks(props.node, bookmarks_list);
+          if(!(bookmarks_list.length === 0)) {
+            chrome.storage.local.set({pl_playlist:bookmarks_list}, () => {
+              props.setPLView(true);
+            })
+          }
+          else {
+            alert("There are no bookmarks in this folder!");
+          }
+        }}
+      > 
+        {props.node.title ? props.node.title : "Root!"} 
+      </div>
+    </div>
+  )
+}
 
 // destructive: traverse bookmark tree, filling bookmarks_list with bookmarks
-// TODO: options for "no subfolders"
 function processBookmarks(node_list, bookmarks_list) { 
   node_list.children.forEach((node) => {
     if(!node.children) { 
@@ -15,41 +45,6 @@ function processBookmarks(node_list, bookmarks_list) {
       processBookmarks(node, bookmarks_list);
     }
   });
-}
-
-function FolderButton(props) {
-  return (
-    <div 
-      style={{
-        backgroundImage:"url(" + FolderBlue + ")",
-        backgroundRepeat:"no-repeat",
-        backgroundPosition:props.depth*18,
-        paddingLeft:20 + props.depth*18,
-        height:"20px",
-        lineHeight:"20px",
-        overflow:"hidden",
-        onMouseOver:() => console.log("hi")
-      }}
-      className="FolderButton"
-      key={props.node.id}
-      onClick={
-        function() {
-          var bookmarks_list = [];
-          processBookmarks(props.node, bookmarks_list);
-          if(!(bookmarks_list.length === 0)){
-            chrome.storage.local.set({pl_playlist:bookmarks_list}, function() {
-              props.setPLView(true);
-            })
-          }
-          else {
-            alert("There are no bookmarks in this folder!");
-          }
-        }
-      }
-    > 
-      {props.node.title ? props.node.title : "ROOT"} 
-    </div>
-  )
 }
 
 export default FolderButton;

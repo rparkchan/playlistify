@@ -1,11 +1,15 @@
 /*global chrome*/
+
 import React from 'react';
 import FolderList from './folder-list.js';
 import BookmarkList from './bookmark-list.js';
-import {styles} from './styles.js'
 
+/** 
+ * ViewManager:
+ *   Manages whether popup is in playlist or folder view.
+ */
 
-class Flipper extends React.Component {
+class ViewManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,15 +18,14 @@ class Flipper extends React.Component {
   }
 
   componentDidMount() {
-    var that = this;
-    chrome.storage.local.get(['pl_view', 'pl_playlist', 'pl_index'], function(result) {
-      that.setState({playlist_view:result.pl_view});
+    chrome.storage.local.get(['pl_view'], (result) => {
+      this.setState({playlist_view:result.pl_view});
     })
   }
 
-  setPLView = (playlist_view) => {
-    chrome.storage.local.set({pl_view:playlist_view}, () => {
-      this.setState({playlist_view:playlist_view});
+  setPLView = (view) => {
+    chrome.storage.local.set({pl_view:view}, () => {
+      this.setState({playlist_view:view});
     })
   };
 
@@ -38,4 +41,4 @@ class Flipper extends React.Component {
   }
 }
 
-export default Flipper;
+export default ViewManager;

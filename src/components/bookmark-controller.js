@@ -1,7 +1,14 @@
 /*global chrome*/
+
 import React from 'react';
 import {styles} from './styles.js';
-import XBlack from '../images/x_black.png';
+
+/**
+ * BookmarkController:
+ *   Persistent top bar of BookmarkList: contains buttons to revert to 
+ *   FolderList view, play/pause audio or video content, shuffle current 
+ *   playlist, switch to music mode, or exit the current playlist tab/window.
+ */
 
 class BookmarkController extends React.Component {
   constructor(props) {
@@ -14,10 +21,9 @@ class BookmarkController extends React.Component {
   componentDidMount() {
     chrome.storage.local.get(['pl_musmode'], (result) => {
       if(result.pl_musmode != null) {
-        console.log(result.pl_musmode);
         this.setState({musmode:result.pl_musmode})
       }
-      else { // should only be the very first time
+      else {
         chrome.storage.local.set({pl_musmode:false});
       }
     })
@@ -29,39 +35,33 @@ class BookmarkController extends React.Component {
         <div style={{width:254, display:"flex"}}>
           <button 
             style={styles.BookmarkControllerButton({})}
-            onClick = {
-              () => {
-                chrome.storage.local.remove(["pl_playlist", "pl_index"], () => {
-                  this.props.setPLView(false);
-                })
-              }
-            }
+            onClick = {() => {
+              chrome.storage.local.remove(["pl_playlist", "pl_index"], () => {
+                this.props.setPLView(false);
+              })
+            }}
           >
             &#x021AB; Back
           </button>
 
           <button
             style={styles.BookmarkControllerButton({})}
-            onClick = {
-              () => {
-                chrome.storage.local.get(["pl_tabid"], function(result){
-                  if(result.pl_tabid != null) {
-                    chrome.tabs.sendMessage(result.pl_tabid,{play_button:true})
-                  }
-                });
-              }
-            }
+            onClick = {() => {
+              chrome.storage.local.get(["pl_tabid"], (result) => {
+                if(result.pl_tabid != null) {
+                  chrome.tabs.sendMessage(result.pl_tabid,{play_button:true})
+                }
+              });
+            }}
           >
             Play/Pause
           </button>
 
           <button
             style={styles.BookmarkControllerButton({})}
-            onClick = {
-              () => {
-                this.props.shufflePlaylist();
-              }
-            }
+            onClick = {() => {
+              this.props.shufflePlaylist();
+            }}
           >
             Shuffle
           </button>
@@ -71,42 +71,32 @@ class BookmarkController extends React.Component {
               ...styles.BookmarkControllerButton({}), 
               ...{backgroundColor:this.state.musmode ? "red" : "white"}
             }}
-            onClick = {
-              () => {
-                this.setState({musmode:!this.state.musmode}, () => {
-                  chrome.storage.local.set({pl_musmode:this.state.musmode});
-                });
-              }
-            }
+            onClick = {() => {
+              this.setState({musmode:!this.state.musmode}, () => {
+                chrome.storage.local.set({pl_musmode:this.state.musmode});
+              });
+            }}
           >
             &#x0266A; Mode
           </button>
         </div>
 
         <button 
-          style={{
-            background:"url(" + XBlack + ") no-repeat",
-            backgroundPosition:"center center",
-            height:16,
-            width:16,
-            border:"none",
+          style={styles.BookmarkControllerExit({})}
+          onClick = {() => {
+            chrome.storage.local.get(["pl_tabid"], (result) => {
+              if(result.pl_tabid != null) {
+                chrome.tabs.remove(result.pl_tabid, () => {
+                  let window_vars = ["pl_tabid", "pl_windowid", "pl_index"]
+                  chrome.storage.local.remove(window_vars);
+                  this.props.editIndex(null);
+                })
+              }
+            })
           }}
-          onClick = {
-            () => {
-              chrome.storage.local.get(["pl_tabid"], (result) => {
-                if(result.pl_tabid != null) {
-                  chrome.tabs.remove(result.pl_tabid, () => {
-                    chrome.storage.local.remove(["pl_tabid", "pl_windowid", "pl_index"]);
-                    this.props.editIndex(null);
-                  })
-                }
-              })
-            }
-          }
-        >
-        </button>
+        />
       </div>
-      );
+    );
   }
 }
 

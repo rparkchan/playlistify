@@ -69,7 +69,7 @@ class BookmarkController extends React.Component {
           <button
             style = {{
               ...styles.BookmarkControllerButton({}), 
-              ...{backgroundColor:this.state.musmode ? "red" : "white"}
+              ...{backgroundColor:this.state.musmode ? "#b3ffff" : "white"}
             }}
             onClick = {() => {
               this.setState({musmode:!this.state.musmode}, () => {

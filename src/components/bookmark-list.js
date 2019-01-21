@@ -18,14 +18,18 @@ class BookmarkList extends React.Component {
       bm_list: null,
       bm_index: null,
       view_index:0,
+      filtered_list: null,
+      filter_term: "",
     };
   }
 
   componentDidMount() {
     chrome.storage.local.get(["pl_playlist", "pl_index"], (result) => {
-      this.setState({bm_list:result.pl_playlist, bm_index:result.pl_index});
+      this.setState({bm_list:result.pl_playlist, bm_index:result.pl_index}, () => {
+        this.filterSearch("", false);
+      });
       if(result.pl_playlist != null) {
-        let root_height = 24+28*Math.min(result.pl_playlist.length, 10) + "px";
+        let root_height = 40+28*Math.min(result.pl_playlist.length, 10) + "px";
         let scrl_height = (28*Math.max(result.pl_index-2,0));
         document.getElementById('root').style.height = root_height;
         document.getElementById("entries_container").scrollTop = scrl_height;
@@ -54,9 +58,12 @@ class BookmarkList extends React.Component {
       let ed = this.state.bm_list;
       let n_ind = this.state.bm_index;
       ed.splice(i,1);
+      listPos(ed);
       n_ind = n_ind == null ? null : n_ind-(i < n_ind);
       chrome.storage.local.set({pl_playlist:ed, pl_index:n_ind}, () => {
-        this.setState({bm_list:ed, bm_index:n_ind});
+        this.setState({bm_list:ed, bm_index:n_ind}, () => {
+          this.filterSearch(this.state.filter_term, false);
+        });
       });
     }
   }
@@ -69,8 +76,31 @@ class BookmarkList extends React.Component {
       if(i != this.state.bm_index && j != this.state.bm_index)
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
+    listPos(shuffled); // re-listPos the actual playlist
     chrome.storage.local.set({pl_playlist:shuffled}, () => {
-      this.setState({bm_list:shuffled});
+      this.setState({bm_list:shuffled}, () => {
+        this.filterSearch(this.state.filter_term, false);
+      });
+    });
+  }
+
+  // update this state's filtered_list and filter_term by search term
+  filterSearch = (term, autoscroll) => {
+    let filtered = this.state.bm_list.filter( 
+      (node) => (node.title.toLowerCase().includes(term.toLowerCase()))
+    )
+    let root_height = 40+28*Math.min(filtered.length, 10) + "px";
+    document.getElementById('root').style.height = root_height;
+    this.setState({filter_term:term, filtered_list:filtered}, () => {
+      if(autoscroll) {
+        if(term == "") {
+          let scrl_height = (28*Math.max(this.state.bm_index-2,0));
+          document.getElementById("entries_container").scrollTop = scrl_height;
+        }
+        else {
+          document.getElementById("entries_container").scrollTop = 0;
+        }
+      }
     });
   }
 
@@ -84,7 +114,7 @@ class BookmarkList extends React.Component {
   };
 
   render() {
-    if(this.state.bm_list != null) {
+    if(this.state.filtered_list != null) {
       return (
         <div>
           <div style={{height:24}}>
@@ -94,31 +124,33 @@ class BookmarkList extends React.Component {
               editIndex={this.editIndex}
               setPLView={this.props.setPLView}
               shufflePlaylist={this.shufflePlaylist}
+              filterSearch={this.filterSearch}
             />
           </div>
           <div 
             id="entries_container" 
-            style={styles.BookmarkListEntries({len:this.state.bm_list.length})}
+            style={styles.BookmarkListEntries({len:this.state.filtered_list.length})}
             ref={this.scrollListener}
-          > 
-            {this.state.bm_list.map((bookmark,index) => {
+          >  
+            {this.state.filtered_list.map((bookmark,index) => { 
+              // use map index for display, and bookmark.list_pos to pass
               let lower_ind = this.state.view_index - 6;
               let upper_ind = this.state.view_index + 18;
               if(index >= lower_ind && index <= upper_ind) {
                 return (
                   <BookmarkEntry 
-                    title={bookmark.title} 
+                    title={bookmark.title}  // can be condensed these three lines
                     url={bookmark.url}
-                    list_pos={index} 
+                    list_pos={bookmark.list_pos} 
                     editIndex={this.editIndex}
-                    current={(this.state.bm_index === index)}
+                    current={(this.state.bm_index === bookmark.list_pos)}
                     removeElement={this.removeElement}
                   />
                 );
               }
               else {
-                return ( // empty container
-                  <div style={styles.BookmarkEntryContainer({})}/>
+                return ( // empty container, 28 high total
+                  <div style={{height:26, width:254, border:"1px solid"}}/>
                 )
               }
             })} 
@@ -129,6 +161,13 @@ class BookmarkList extends React.Component {
     else { // i.e. while local storage hasn't yet called setState()
       return <div ref={this.scrollListener}/>;
     }
+  }
+}
+
+// add a list_pos property to bookmarks_list entries: important for search
+function listPos(bookmarks_list) {
+  for(let i=0; i<bookmarks_list.length; i++) {
+    bookmarks_list[i].list_pos = i;
   }
 }
 

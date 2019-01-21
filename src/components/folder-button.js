@@ -19,6 +19,8 @@ function FolderButton(props) {
         onClick={() => {
           var bookmarks_list = [];
           processBookmarks(props.node, bookmarks_list);
+          listPos(bookmarks_list);
+          console.log(bookmarks_list);
           if(!(bookmarks_list.length === 0)) {
             chrome.storage.local.set({pl_playlist:bookmarks_list}, () => {
               props.setPLView(true);
@@ -45,6 +47,13 @@ function processBookmarks(node_list, bookmarks_list) {
       processBookmarks(node, bookmarks_list);
     }
   });
+}
+
+// add a list_pos property to bookmarks_list entries: important for search
+function listPos(bookmarks_list) {
+  for(let i=0; i<bookmarks_list.length; i++) {
+    bookmarks_list[i].list_pos = i;
+  }
 }
 
 export default FolderButton;

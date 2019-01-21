@@ -5,9 +5,9 @@ import {styles} from './styles.js';
 
 /**
  * BookmarkController:
- *   Persistent top bar of BookmarkList: contains buttons to revert to 
- *   FolderList view, play/pause audio or video content, shuffle current 
- *   playlist, switch to music mode, or exit the current playlist tab/window.
+ *   Persistent top bar of BookmarkList: contains search bar, back button,
+ *   play/pause audio or video content, shuffle current playlist, switch to 
+ *   music mode, or exit the current playlist tab/window.
  */
 
 class BookmarkController extends React.Component {
@@ -32,7 +32,13 @@ class BookmarkController extends React.Component {
   render() {
     return (
       <div style={styles.BookmarkControllerContainer({})}>
-        <div style={{width:254, display:"flex"}}>
+        <input 
+          type="text>" 
+          style={styles.BookmarkControllerSearch({})}
+          placeholder="search..."
+          onChange = {(update) => this.props.filterSearch(update.target.value, true)}
+        />
+        <div style={styles.BookmarkControllerActions({})}>
           <button 
             style={styles.BookmarkControllerButton({})}
             onClick = {() => {
@@ -63,7 +69,7 @@ class BookmarkController extends React.Component {
               this.props.shufflePlaylist();
             }}
           >
-            Shuffle
+            &#x02928; Shuffle
           </button>
 
           <button

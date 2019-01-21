@@ -3,29 +3,24 @@ import XWhite from "../images/x_white.png";
 import XBlack from "../images/x_black.png";
 import XRed from "../images/x_red.png";
 
-function BookmarkButtonContainer(props) {
+function BookmarkEntryContainer(props) {
   return {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     height:"24px",
-    // marginTop: props.list_pos==0 ? 4 : 0,
-    // marginBottom: 4,
     paddingBottom: 2,
     paddingTop: 2,
     width: "288px",
   };
 }
 
-function BookmarkButtonEntry(props) {
+function BookmarkEntryButton(props) {
   return {
     color: props.current ? "red" : "black",
-    // background: "url(chrome://favicon/size/16@1x/" + props.url + ") no-repeat", // 1x or 2x
-    // backgroundPosition: "4px center",
     border: "1px solid",
     borderColor: props.current ? "red" :  " #808080",
     borderRadius: "2px",
-    // paddingLeft: "24px",
     height: "24px",
     width: "254px",
     lineHeight: "24px",
@@ -35,7 +30,17 @@ function BookmarkButtonEntry(props) {
   };
 }
 
-function BookmarkButtonRemove(props) {
+function BookmarkEntryTitle(props) {
+  return {
+    position:"absolute", 
+    left:24, 
+    height:24, 
+    width:230, 
+    overflow:"hidden"
+  }
+}
+
+function BookmarkEntryRemove(props) {
   return {
     height: "16px",
     width: "16px",
@@ -69,11 +74,12 @@ function BookmarkControllerButton(props) {
 }
 
 const styles = {
-  BookmarkButtonContainer: BookmarkButtonContainer,
-  BookmarkButtonEntry: BookmarkButtonEntry,
-  BookmarkButtonRemove: BookmarkButtonRemove, 
+  BookmarkEntryContainer: BookmarkEntryContainer,
+  BookmarkEntryButton: BookmarkEntryButton,
+  BookmarkEntryRemove: BookmarkEntryRemove, 
   BookmarkControllerContainer: BookmarkControllerContainer,
   BookmarkControllerButton: BookmarkControllerButton,
+  BookmarkEntryTitle: BookmarkEntryTitle,
 }
 
 export {styles};

@@ -1,6 +1,6 @@
 /*global chrome*/
 import React from 'react';
-import BookmarkButton from './bookmark-button';
+import BookmarkEntry from './bookmark-entry';
 import BookmarkController from './bookmark-controller';
 import {styles} from './styles.js'
 
@@ -23,7 +23,7 @@ class BookmarkList extends React.Component {
     chrome.storage.local.get(["pl_playlist", "pl_index", "pl_tabid", "pl_dumbo"], function(result) {
       that.setState({bm_list:result.pl_playlist, bm_index:result.pl_index, bm_tab:result.pl_tabid});
       if(result.pl_playlist != null) {
-        document.getElementById('root').style.height = 24+28*Math.min(result.pl_playlist.length, 12) + "px";
+        document.getElementById('root').style.height = 24+28*Math.min(result.pl_playlist.length, 10) + "px";
         document.getElementById("button_container").scrollTop = (28*Math.max(result.pl_index-2,0));
       }
     });
@@ -39,6 +39,15 @@ class BookmarkList extends React.Component {
 
   editIndex = (i) => {
     this.setState({bm_index:i});
+  }
+
+  removeElement = (i) => {
+    var ed = this.state.bm_list;
+    ed.splice(i,1);
+    var r = i < this.state.bm_index;
+    chrome.storage.local.set({pl_playlist:ed, pl_index:this.state.bm_index-r}, () => {
+      this.setState({bm_list:ed, bm_index:this.state.bm_index-r});
+    });
   }
   
   // shuffle the playlist but keep the current index song intact (if it exists)
@@ -84,7 +93,7 @@ class BookmarkList extends React.Component {
             style= {{
               position:"fixed",
               top:36,
-              height:(28*Math.min(that.state.bm_list.length, 12)) + "px",
+              height:(28*Math.min(that.state.bm_list.length, 10)) + "px",
               width:308, // to move the scroll bar all the way right
               overflow:"auto",
             }}
@@ -93,18 +102,19 @@ class BookmarkList extends React.Component {
             {that.state.bm_list.map(function(bookmark,index) {
               if(index >= that.state.view_index - 6 && index <= that.state.view_index + 18) {
                 return (
-                  <BookmarkButton 
+                  <BookmarkEntry 
                     title={bookmark.title} 
                     url={bookmark.url}
                     list_pos={index} 
                     editIndex={that.editIndex}
                     current={(that.state.bm_index === index) ? true : false}
+                    removeElement={that.removeElement}
                   />
                 );
               }
               else {
                 return (
-                  <div style={styles.BookmarkButtonContainer({})}/>
+                  <div style={styles.BookmarkEntryContainer({})}/>
                 )
               }
             })} 

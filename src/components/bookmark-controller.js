@@ -32,75 +32,86 @@ class BookmarkController extends React.Component {
   render() {
     return (
       <div style={styles.BookmarkControllerContainer({})}>
-        <input 
-          type="text>" 
-          style={styles.BookmarkControllerSearch({})}
-          placeholder="search..."
-          onChange = {(update) => this.props.filterSearch(update.target.value, true)}
-        />
-        <div style={styles.BookmarkControllerActions({})}>
+        <div style={styles.BookmarkControllerInputs({})}>
+          <input 
+            type="text>" 
+            style={styles.BookmarkControllerSearch({})}
+            placeholder="Search for bookmarks..."
+            onChange={(update) => this.props.filterSearch(update.target.value, true)}
+          />
           <button 
-            style={styles.BookmarkControllerButton({})}
-            onClick = {() => {
-              chrome.storage.local.remove(["pl_playlist", "pl_index"], () => {
-                this.props.setPLView(false);
-              })
+            style={styles.SixteenButton({icon:"Save"})}
+            onClick={() => {
+              this.props.saveFiltered()
             }}
-          >
-            &#x021AB; Back
-          </button>
+          />
+        </div>
 
-          <button
-            style={styles.BookmarkControllerButton({})}
+        <div style={styles.BookmarkControllerActions({})}>
+          <div style={styles.BookmarkControllerButtons({})}>
+            <button 
+              style={styles.BookmarkControllerButton({})}
+              onClick = {() => {
+                chrome.storage.local.remove(["pl_playlist", "pl_index"], () => {
+                  this.props.setPLView(false);
+                })
+              }}
+            >
+              &#x021AB; Back
+            </button>
+
+            <button
+              style={styles.BookmarkControllerButton({})}
+              onClick = {() => {
+                chrome.storage.local.get(["pl_tabid"], (result) => {
+                  if(result.pl_tabid != null) {
+                    chrome.tabs.sendMessage(result.pl_tabid,{play_button:true})
+                  }
+                });
+              }}
+            >
+              Play/Pause
+            </button>
+
+            <button
+              style={styles.BookmarkControllerButton({})}
+              onClick = {() => {
+                this.props.shufflePlaylist();
+              }}
+            >
+              &#x02928; Shuffle
+            </button>
+
+            <button
+              style = {{
+                ...styles.BookmarkControllerButton({}), 
+                ...{backgroundColor:this.state.musmode ? "#ccffcc" : "white"}
+              }}
+              onClick = {() => {
+                this.setState({musmode:!this.state.musmode}, () => {
+                  chrome.storage.local.set({pl_musmode:this.state.musmode});
+                });
+              }}
+            >
+              &#x0266A; Mode
+            </button>
+          </div>
+
+          <button 
+            style={styles.SixteenButton({icon:"XBlack"})}
             onClick = {() => {
               chrome.storage.local.get(["pl_tabid"], (result) => {
                 if(result.pl_tabid != null) {
-                  chrome.tabs.sendMessage(result.pl_tabid,{play_button:true})
+                  chrome.tabs.remove(result.pl_tabid, () => {
+                    let window_vars = ["pl_tabid", "pl_windowid", "pl_index"]
+                    chrome.storage.local.remove(window_vars);
+                    this.props.editIndex(null);
+                  })
                 }
-              });
+              })
             }}
-          >
-            Play/Pause
-          </button>
-
-          <button
-            style={styles.BookmarkControllerButton({})}
-            onClick = {() => {
-              this.props.shufflePlaylist();
-            }}
-          >
-            &#x02928; Shuffle
-          </button>
-
-          <button
-            style = {{
-              ...styles.BookmarkControllerButton({}), 
-              ...{backgroundColor:this.state.musmode ? "#b3ffff" : "white"}
-            }}
-            onClick = {() => {
-              this.setState({musmode:!this.state.musmode}, () => {
-                chrome.storage.local.set({pl_musmode:this.state.musmode});
-              });
-            }}
-          >
-            &#x0266A; Mode
-          </button>
+          />
         </div>
-
-        <button 
-          style={styles.BookmarkControllerExit({})}
-          onClick = {() => {
-            chrome.storage.local.get(["pl_tabid"], (result) => {
-              if(result.pl_tabid != null) {
-                chrome.tabs.remove(result.pl_tabid, () => {
-                  let window_vars = ["pl_tabid", "pl_windowid", "pl_index"]
-                  chrome.storage.local.remove(window_vars);
-                  this.props.editIndex(null);
-                })
-              }
-            })
-          }}
-        />
       </div>
     );
   }

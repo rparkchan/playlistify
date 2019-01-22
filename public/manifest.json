@@ -18,6 +18,13 @@
       "js": ["./static/js/content.js"]
     }
   ],
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "mac": "MacCtrl+P"
+      }
+    }
+  },
   "permissions": [
     "bookmarks", "tabs", "storage", "*://*/*", "chrome://favicon/*", "chrome://favicon/"
   ],

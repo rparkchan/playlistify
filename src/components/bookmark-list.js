@@ -29,7 +29,7 @@ class BookmarkList extends React.Component {
         this.filterSearch("", false);
       });
       if(result.pl_playlist != null) {
-        let root_height = 40+28*Math.min(result.pl_playlist.length, 10) + "px";
+        let root_height = 40+28*Math.min(result.pl_playlist.length, 8) + "px";
         let scrl_height = (28*Math.max(result.pl_index-2,0));
         document.getElementById('root').style.height = root_height;
         document.getElementById("entries_container").scrollTop = scrl_height;
@@ -89,7 +89,7 @@ class BookmarkList extends React.Component {
     let filtered = this.state.bm_list.filter( 
       (node) => (node.title.toLowerCase().includes(term.toLowerCase()))
     )
-    let root_height = 40+28*Math.min(filtered.length, 10) + "px";
+    let root_height = 40+28*Math.min(filtered.length, 8) + "px";
     document.getElementById('root').style.height = root_height;
     this.setState({filter_term:term, filtered_list:filtered}, () => {
       if(autoscroll) {
@@ -102,6 +102,21 @@ class BookmarkList extends React.Component {
         }
       }
     });
+  }
+
+  // edit the current playlist to be the filtered playlist
+  saveFiltered = () => {
+    let new_plist = this.state.filtered_list;
+    listPos(new_plist);
+    let new_index = null;
+    if(this.state.bm_index != null) {
+      if(new_plist.includes(this.state.bm_list[this.state.bm_index])) {
+        new_index = new_plist.indexOf(this.state.bm_list[this.state.bm_index])
+      }
+    }
+    this.setState({bm_list:new_plist, bm_index:new_index}, () => {
+      chrome.storage.local.set({pl_playlist:new_plist,pl_index:new_index});
+    })
   }
 
   // callback ref: when the BookmarkList mounts, attach listener for scroll
@@ -125,6 +140,7 @@ class BookmarkList extends React.Component {
               setPLView={this.props.setPLView}
               shufflePlaylist={this.shufflePlaylist}
               filterSearch={this.filterSearch}
+              saveFiltered={this.saveFiltered}
             />
           </div>
           <div 
@@ -133,7 +149,6 @@ class BookmarkList extends React.Component {
             ref={this.scrollListener}
           >  
             {this.state.filtered_list.map((bookmark,index) => { 
-              // use map index for display, and bookmark.list_pos to pass
               let lower_ind = this.state.view_index - 6;
               let upper_ind = this.state.view_index + 18;
               if(index >= lower_ind && index <= upper_ind) {

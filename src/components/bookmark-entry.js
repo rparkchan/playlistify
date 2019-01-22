@@ -26,7 +26,7 @@ function BookmarkEntry(props) {
         </div>
       </div>
       <button 
-        style={styles.BookmarkEntryRemove(props)}
+        style={styles.SixteenButton({icon:"XGray"})}
         onClick= {() => {
           props.removeElement(props.list_pos);
         }}

@@ -1,5 +1,22 @@
 import XGray from "../images/x_gray.png";
 import XBlack from "../images/x_black.png";
+import Save from "../images/save.png";
+
+var icons = {
+  XGray: XGray,
+  XBlack: XBlack,
+  Save: Save,
+}
+
+function SixteenButton(params) {
+  return {
+    background:"url(" + icons[params.icon] + ") no-repeat",
+    backgroundPosition:"center center",
+    height:16,
+    width:16,
+    border:"none",
+  }  
+}
 
 function BookmarkControllerContainer(params) {
   return {
@@ -17,15 +34,35 @@ function BookmarkControllerContainer(params) {
   };
 }
 
-function BookmarkControllerSearch(params) {
+function BookmarkControllerInputs(params) {
   return {
-    width:250,
-    height:12,
+    width:288,
+    display:"flex",
+    justifyContent:"space-between",
+    alignItems:"center",
+    height:16,
     marginBottom:4,
   }
 }
 
+function BookmarkControllerSearch(params) {
+  return {
+    width:250,
+    height:12,
+  }
+}
+
 function BookmarkControllerActions(params) {
+  return {
+    width:288,
+    display:"flex",
+    justifyContent:"space-between",
+    alignItems:"center",
+    height:20,
+  }
+}
+
+function BookmarkControllerButtons(params) {
   return {
     width:256, 
     display:"flex", 
@@ -40,17 +77,6 @@ function BookmarkControllerButton(params) {
     borderRadius:"4px",
     height:18,
     lineHeight:0,
-  }
-}
-
-function BookmarkControllerExit(params) {
-  return {
-    background:"url(" + XBlack + ") no-repeat",
-    backgroundPosition:"center center",
-    height:16,
-    width:16,
-    border:"none",
-    // top:50,
   }
 }
 
@@ -70,7 +96,7 @@ function BookmarkEntryButton(params) {
   return {
     color: params.current ? "red" : "black",
     border: "1px solid",
-    borderColor: params.current ? "red" :  " #808080",
+    borderColor: params.current ? "red" :  "#404040",
     borderRadius: "2px",
     height: "24px",
     width: "254px",
@@ -91,22 +117,12 @@ function BookmarkEntryTitle(params) {
   }
 }
 
-function BookmarkEntryRemove(params) {
-  return {
-    height: "16px",
-    width: "16px",
-    background: "url(" + XGray + ") no-repeat",
-    backgroundPosition: "center center",
-    border: "none",
-  };
-}
-
 function BookmarkListEntries(params) {
   return {
     position:"fixed",
     // top:36,
     top:52,
-    height:(28*Math.min(params.len, 10)) + "px",
+    height:(28*Math.min(params.len, 8)) + "px",
     width:308, // to move the scroll bar all the way right
     overflow:"auto",
   }
@@ -141,14 +157,14 @@ function FolderButtonTitle(params) {
 
 const styles = {
   BookmarkControllerContainer: BookmarkControllerContainer,
+  BookmarkControllerInputs: BookmarkControllerInputs,
   BookmarkControllerSearch: BookmarkControllerSearch,
   BookmarkControllerActions: BookmarkControllerActions,
+  BookmarkControllerButtons: BookmarkControllerButtons,
   BookmarkControllerButton: BookmarkControllerButton,
-  BookmarkControllerExit: BookmarkControllerExit,
 
   BookmarkEntryContainer: BookmarkEntryContainer,
   BookmarkEntryButton: BookmarkEntryButton,
-  BookmarkEntryRemove: BookmarkEntryRemove, 
   BookmarkEntryTitle: BookmarkEntryTitle,
   
   BookmarkListEntries: BookmarkListEntries,
@@ -156,6 +172,8 @@ const styles = {
   FolderButtonContainer: FolderButtonContainer,
   FolderButtonIcon: FolderButtonIcon,
   FolderButtonTitle: FolderButtonTitle,
+
+  SixteenButton: SixteenButton,
 }
 
 export {styles};

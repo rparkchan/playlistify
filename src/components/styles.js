@@ -121,7 +121,7 @@ const BookmarkEntryIcon = (params) => {
 const BookmarkEntryTitle = (params) => {
   return {
     position:"absolute", 
-    left:24, 
+    left:26, 
     height:24, 
     width:230, 
     overflow:"hidden",

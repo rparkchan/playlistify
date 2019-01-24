@@ -30,6 +30,16 @@ function handleNewIndex(message, sender) {
   })
 }
 
+// listen for completed tab to begin executing content script
+chrome.tabs.onUpdated.addListener((tabId,changeInfo,tab) => {
+  chrome.storage.local.get(["pl_tabid"], (result) => {
+    if(result.pl_tabid === tabId && changeInfo.status=="complete") {
+      console.log("background: complete tab load");
+      chrome.tabs.sendMessage(tabId, {update:"complete"});
+    }
+  })
+})
+
 // listen for index changes from content.js or components
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if(message.new_index != null) {

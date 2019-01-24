@@ -34,7 +34,7 @@ class ViewManager extends React.Component {
       ? <BookmarkList setPLView = {this.setPLView}/> 
       : <FolderList setPLView = {this.setPLView}/>;
     return (
-      <div>
+      <div style={{zIndex:0}}>
         {contentList}
       </div>
     );

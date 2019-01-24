@@ -1,12 +1,13 @@
 /*global chrome*/
 
-var music_regex = {
+const music_regex = {
   youtube: /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/,
-  bandcamp: /((https?:\/\/(www\.)?(.*\.bandcamp\.com\/track\/.*|.*\.bandcamp\.com\/album\/.*)))/i,
+  bandcamp: /((https?:\/\/(www\.)?(.*\.bandcamp\.com\/.*\/.*|.*\.bandcamp\.com\/releases)))/i,
   soundcloud: /((https?:\/\/(www\.)?(.*soundcloud\.com\/.*\/.*|.*soundcloud\.com\/.*\/.*\/.*)))/i,
   vimeo: /((https?:\/\/(www\.)?(vimeo\.com\/.*)))/i
 }
-var url = window.location.href;
+const url = window.location.href;
+
 var play_button = [], videos = [], audios = [];
 
 function playNext() {
@@ -82,38 +83,48 @@ else if(url.match(music_regex.soundcloud)) {
   // listen for end of audio
   var config = {attributes : true, childlist: true, subtree: true, characterData: true};
   var el = document.getElementsByClassName("playbackSoundBadge");
-  var icon_href = document.getElementsByClassName("playbackSoundBadge__avatar sc-media-image")[0].href;
-  var observer = new MutationObserver(function(mutationslist, obs) {
-    var new_icon_href = document.getElementsByClassName("playbackSoundBadge__avatar sc-media-image")[0].href;
-    if (new_icon_href !== icon_href) {
-      obs.disconnect();
-      playNext();
-    }
-  })
-  observer.observe(el[0], config);
+  var icon = document.getElementsByClassName("playbackSoundBadge__avatar sc-media-image")
+  if(icon.length > 0) {
+    var icon_href = icon[0].href;
+    var observer = new MutationObserver(function(mutationslist, obs) {
+      var new_icon = document.getElementsByClassName("playbackSoundBadge__avatar sc-media-image")
+      if(new_icon.length > 0) {
+        var new_icon_href = new_icon[0].href;
+        if (new_icon_href !== icon_href) {
+          obs.disconnect();
+          playNext();
+        }
+      }
+    })
+    observer.observe(el[0], config);
+  }
 } 
 
 // Vimeo
 else if(url.match(music_regex.vimeo)) {
-  // Vimeo links don't start automatically
-  console.log("vimeo match");
-  play_button = document.getElementsByClassName("play rounded-box");
-  if(play_button[0]) {
-    if(play_button[0].title == "Play") {
-      play_button[0].click();
+  setTimeout(() => {
+    // Vimeo links don't start automatically
+    console.log("vimeo match");
+    play_button = document.getElementsByClassName("play rounded-box");
+    console.log(play_button);
+    if(play_button[0]) {
+      if(play_button[0].title == "Play") {
+        play_button[0].click();
+      }
     }
-  }
 
-  // listen for end of audio
-  videos = document.getElementsByTagName('video');
-  if(videos.length > 0) { 
-    videos[0].addEventListener('ended',function() {
-      playNext();
-    });
-  }
-  else {
-    console.log("this is a Vimeo link with no video content!");
-  }
+    // listen for end of audio
+    videos = document.getElementsByTagName('video');
+    console.log(videos);
+    if(videos[0]) { 
+      videos[0].addEventListener('ended',function() {
+        playNext();
+      });
+    }
+    else {
+      console.log("this is a Vimeo link with no video content!");
+    }
+  }, 500)
 }
 
 /******************************************************************************************************/

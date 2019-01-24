@@ -87,8 +87,8 @@ class BookmarkList extends React.Component {
   // update this state's filtered_list and filter_term by search term
   filterSearch = (term, autoscroll) => {
     let filtered = this.state.bm_list.filter( 
-      (node) => (node.title.toLowerCase().includes(term.toLowerCase()))
-    )
+      (node) => (node.title.toLowerCase().includes(term.toLowerCase()) 
+              || node.url.toLowerCase().includes(term.toLowerCase())))
     let root_height = 40+28*Math.min(filtered.length, 8) + "px";
     document.getElementById('root').style.height = root_height;
     this.setState({filter_term:term, filtered_list:filtered}, () => {

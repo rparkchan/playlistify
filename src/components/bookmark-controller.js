@@ -34,13 +34,13 @@ class BookmarkController extends React.Component {
       <div style={styles.BookmarkControllerContainer({})}>
         <div style={styles.BookmarkControllerInputs({})}>
           <input 
-            type="text>" 
-            style={styles.BookmarkControllerSearch({})}
+            type="text" 
+            style={{width:250,height:12}}
             placeholder="Search for bookmarks..."
             onChange={(update) => this.props.filterSearch(update.target.value, true)}
           />
           <button 
-            style={styles.SixteenButton({icon:"Save"})}
+            style={styles.SixteenButton({icon:"Lock"})}
             onClick={() => {
               this.props.saveFiltered()
             }}

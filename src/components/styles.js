@@ -1,11 +1,13 @@
 import XGray from "../images/x_gray.png";
-import XBlack from "../images/x_black.png";
+import XBlack from "../images/x_black-sheet.png";
 import Save from "../images/save.png";
+import Lock from "../images/lock.png";
 
 var icons = {
   XGray: XGray,
   XBlack: XBlack,
   Save: Save,
+  Lock: Lock,
 }
 
 function SixteenButton(params) {
@@ -23,38 +25,27 @@ function BookmarkControllerContainer(params) {
     position:"fixed",
     top:8,
     left:8,
-    // height:24,
-    height:40, // 
-    width:288,
+    height:44,
+    width:286,
     display:"flex",
-    alignItems:"center",
-    justifyContent:"space-between",
-    flexWrap:"wrap", // 
-    // border:"1px solid" // 
+    flexWrap:"wrap",
   };
 }
 
 function BookmarkControllerInputs(params) {
   return {
-    width:288,
+    width:286,
     display:"flex",
     justifyContent:"space-between",
     alignItems:"center",
     height:16,
-    marginBottom:4,
-  }
-}
-
-function BookmarkControllerSearch(params) {
-  return {
-    width:250,
-    height:12,
+    marginBottom:2,
   }
 }
 
 function BookmarkControllerActions(params) {
   return {
-    width:288,
+    width:286,
     display:"flex",
     justifyContent:"space-between",
     alignItems:"center",
@@ -72,7 +63,6 @@ function BookmarkControllerButtons(params) {
 
 function BookmarkControllerButton(params) {
   return {
-    // marginRight:3,
     border:"1px outset #d9d9d9",
     borderRadius:"4px",
     height:18,
@@ -88,7 +78,7 @@ function BookmarkEntryContainer(params) {
     height:"24px",
     paddingBottom: 2,
     paddingTop: 2,
-    width: "288px",
+    width: 286,
   };
 }
 
@@ -96,7 +86,7 @@ function BookmarkEntryButton(params) {
   return {
     color: params.current ? "red" : "black",
     border: "1px solid",
-    borderColor: params.current ? "red" :  "#404040",
+    borderColor: params.current ? "red" :  "#737373",
     borderRadius: "2px",
     height: "24px",
     width: "254px",
@@ -104,6 +94,7 @@ function BookmarkEntryButton(params) {
     overflow: "hidden",
     display: "flex",
     alignItems: "center",
+    cursor:"pointer",
   };
 }
 
@@ -123,7 +114,7 @@ function BookmarkListEntries(params) {
     // top:36,
     top:52,
     height:(28*Math.min(params.len, 8)) + "px",
-    width:308, // to move the scroll bar all the way right
+    width:302, // to move the scroll bar all the way right
     overflow:"auto",
   }
 }
@@ -132,7 +123,7 @@ function FolderButtonContainer(params) {
   return {
     display:"flex", 
     height:"16px", 
-    alignItems:"center"
+    alignItems:"center",
   }
 }
 
@@ -152,13 +143,13 @@ function FolderButtonTitle(params) {
     overflow:"hidden",
     fontFamily:"Courier New",
     textDecoration:"underline",
+    cursor: "pointer",
   }
 }
 
 const styles = {
   BookmarkControllerContainer: BookmarkControllerContainer,
   BookmarkControllerInputs: BookmarkControllerInputs,
-  BookmarkControllerSearch: BookmarkControllerSearch,
   BookmarkControllerActions: BookmarkControllerActions,
   BookmarkControllerButtons: BookmarkControllerButtons,
   BookmarkControllerButton: BookmarkControllerButton,

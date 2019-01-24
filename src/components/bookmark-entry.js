@@ -11,7 +11,7 @@ import {styles} from './styles.js';
 
 function BookmarkEntry(props) {
   return (
-    <div style={styles.BookmarkEntryContainer(props)}>
+    <div style={styles.BookmarkEntryContainer({})}>
       <div 
         style={styles.BookmarkEntryButton(props)}
         onClick={() => {
@@ -20,7 +20,7 @@ function BookmarkEntry(props) {
           });
         }}  
       > 
-        <img style={{marginLeft:4}} src={"chrome://favicon/size/16@1x/"+props.url}/>
+        <img style={{marginLeft:4,width:16}} src={"chrome://favicon/size/16@1x/"+props.url}/>
         <div style={styles.BookmarkEntryTitle({})}>
           {props.title}
         </div>

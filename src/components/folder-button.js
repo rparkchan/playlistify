@@ -15,6 +15,7 @@ function FolderButton(props) {
     <div style={styles.FolderButtonContainer({})}>
       <img style={styles.FolderButtonIcon(props)} src={Folder}/>
       <div 
+        className={"FolderButtonTitle"}
         style={styles.FolderButtonTitle({})}
         onClick={() => {
           var bookmarks_list = [];

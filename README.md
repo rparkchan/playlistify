@@ -2,8 +2,8 @@
 
 Chrome extension lending playlist-like functionality to bookmarks. Featuring music mode, which allows autoplay through certain common media sites (YouTube, Soundcloud, Bandcamp, Vimeo); edit playlists by search+lock, shuffle, or removal without affecting underlying bookmarks; and more!
 
-![alt text](https://raw.githubusercontent.com/rparkchan/playlistify/master/README_resources/bordered_folder_ex.png)
-![alt text](https://raw.githubusercontent.com/rparkchan/playlistify/master/README_resources/bordered_teebs_ex.png)
+![alt text](https://raw.githubusercontent.com/rparkchan/playlistify/master/README_resources/bordered_folder_ex.jpg)
+![alt text](https://raw.githubusercontent.com/rparkchan/playlistify/master/README_resources/bordered_teebs_ex.jpg)
 
 ### Instructions
 

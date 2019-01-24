@@ -11,22 +11,22 @@ import {styles} from './styles.js';
 
 function BookmarkEntry(props) {
   return (
-    <div style={styles.BookmarkEntryContainer({})}>
+    <div style={styles.bm_entry.outer_div({})}>
       <div 
-        style={styles.BookmarkEntryButton(props)}
+        style={styles.bm_entry.click_div(props)}
         onClick={() => {
           chrome.runtime.sendMessage({new_index:props.list_pos}, (response) => {
             props.editIndex(props.list_pos);
           });
         }}  
       > 
-        <img style={{marginLeft:4,width:16}} src={"chrome://favicon/size/16@1x/"+props.url}/>
-        <div style={styles.BookmarkEntryTitle({})}>
+        <img style={styles.bm_entry.click_image({})} src={"chrome://favicon/size/16@1x/"+props.url}/>
+        <div style={styles.bm_entry.click_title({})}>
           {props.title}
         </div>
       </div>
       <button 
-        style={styles.SixteenButton({icon:"XGray"})}
+        style={styles.bm_entry.icon_button({icon:"XGray"})}
         onClick= {() => {
           props.removeElement(props.list_pos);
         }}

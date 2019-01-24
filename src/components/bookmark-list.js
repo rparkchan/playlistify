@@ -58,7 +58,7 @@ class BookmarkList extends React.Component {
       let ed = this.state.bm_list;
       let n_ind = this.state.bm_index;
       ed.splice(i,1);
-      listPos(ed);
+      indexList(ed);
       n_ind = n_ind == null ? null : n_ind-(i < n_ind);
       chrome.storage.local.set({pl_playlist:ed, pl_index:n_ind}, () => {
         this.setState({bm_list:ed, bm_index:n_ind}, () => {
@@ -76,7 +76,7 @@ class BookmarkList extends React.Component {
       if(i != this.state.bm_index && j != this.state.bm_index)
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    listPos(shuffled); // re-listPos the actual playlist
+    indexList(shuffled); // re-indexList the actual playlist
     chrome.storage.local.set({pl_playlist:shuffled}, () => {
       this.setState({bm_list:shuffled}, () => {
         this.filterSearch(this.state.filter_term, false);
@@ -107,7 +107,7 @@ class BookmarkList extends React.Component {
   // edit the current playlist to be the filtered playlist
   saveFiltered = () => {
     let new_plist = this.state.filtered_list;
-    listPos(new_plist);
+    indexList(new_plist);
     let new_index = null;
     if(this.state.bm_index != null) {
       if(new_plist.includes(this.state.bm_list[this.state.bm_index])) {
@@ -132,7 +132,7 @@ class BookmarkList extends React.Component {
     if(this.state.filtered_list != null) {
       return (
         <div>
-          <div style={{height:24}}>
+          <div style={styles.bm_list.controller_div({})}>
             <BookmarkController 
               bm_index={this.state.bm_index}
               bm_list={this.state.bm_list}
@@ -145,7 +145,7 @@ class BookmarkList extends React.Component {
           </div>
           <div 
             id="entries_container" 
-            style={styles.BookmarkListEntries({len:this.state.filtered_list.length})}
+            style={styles.bm_list.entry_div({len:this.state.filtered_list.length})}
             ref={this.scrollListener}
           >  
             {this.state.filtered_list.map((bookmark,index) => { 
@@ -165,7 +165,7 @@ class BookmarkList extends React.Component {
               }
               else {
                 return ( // empty container, 28 high total
-                  <div style={{height:26, width:254, border:"1px solid"}}/>
+                  <div style={styles.bm_list.empty_div({})}/>
                 )
               }
             })} 
@@ -180,7 +180,7 @@ class BookmarkList extends React.Component {
 }
 
 // add a list_pos property to bookmarks_list entries: important for search
-function listPos(bookmarks_list) {
+const indexList = (bookmarks_list) => {
   for(let i=0; i<bookmarks_list.length; i++) {
     bookmarks_list[i].list_pos = i;
   }

@@ -1,11 +1,11 @@
 /*global chrome*/
 
 import React from 'react';
-import FolderButton from './folder-button.js'
+import FolderEntry from './folder-entry.js'
 
 /** 
  * FolderList
- *   Contains a div of multiple FolderButton's
+ *   Contains a div of multiple FolderEntry's
  */
 
 class FolderList extends React.Component {
@@ -37,7 +37,7 @@ class FolderList extends React.Component {
       <div> 
         {this.state.folders.map((folder) => {
           return (
-            <FolderButton 
+            <FolderEntry 
               node={folder.node} 
               depth={folder.depth} 
               setPLView={this.props.setPLView}

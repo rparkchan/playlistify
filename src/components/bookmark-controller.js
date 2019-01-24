@@ -31,26 +31,26 @@ class BookmarkController extends React.Component {
 
   render() {
     return (
-      <div style={styles.BookmarkControllerContainer({})}>
-        <div style={styles.BookmarkControllerInputs({})}>
+      <div style={styles.bm_ctrl.outer_div({})}>
+        <div style={styles.bm_ctrl.search_div({})}>
           <input 
             type="text" 
-            style={{width:250,height:12}}
+            style={styles.bm_ctrl.text_input({})}
             placeholder="Search for bookmarks..."
             onChange={(update) => this.props.filterSearch(update.target.value, true)}
           />
           <button 
-            style={styles.SixteenButton({icon:"Lock"})}
+            style={styles.bm_ctrl.icon_button({icon:"Lock"})}
             onClick={() => {
               this.props.saveFiltered()
             }}
           />
         </div>
 
-        <div style={styles.BookmarkControllerActions({})}>
-          <div style={styles.BookmarkControllerButtons({})}>
+        <div style={styles.bm_ctrl.action_div({})}>
+          <div style={styles.bm_ctrl.action_div_left({})}>
             <button 
-              style={styles.BookmarkControllerButton({})}
+              style={styles.bm_ctrl.action_div_button({})}
               onClick = {() => {
                 chrome.storage.local.remove(["pl_playlist", "pl_index"], () => {
                   this.props.setPLView(false);
@@ -61,7 +61,7 @@ class BookmarkController extends React.Component {
             </button>
 
             <button
-              style={styles.BookmarkControllerButton({})}
+              style={styles.bm_ctrl.action_div_button({})}
               onClick = {() => {
                 chrome.storage.local.get(["pl_tabid"], (result) => {
                   if(result.pl_tabid != null) {
@@ -74,7 +74,7 @@ class BookmarkController extends React.Component {
             </button>
 
             <button
-              style={styles.BookmarkControllerButton({})}
+              style={styles.bm_ctrl.action_div_button({})}
               onClick = {() => {
                 this.props.shufflePlaylist();
               }}
@@ -84,7 +84,7 @@ class BookmarkController extends React.Component {
 
             <button
               style = {{
-                ...styles.BookmarkControllerButton({}), 
+                ...styles.bm_ctrl.action_div_button({}), 
                 ...{backgroundColor:this.state.musmode ? "#ccffcc" : "white"}
               }}
               onClick = {() => {
@@ -98,7 +98,7 @@ class BookmarkController extends React.Component {
           </div>
 
           <button 
-            style={styles.SixteenButton({icon:"XBlack"})}
+            style={styles.bm_ctrl.icon_button({icon:"XBlack"})}
             onClick = {() => {
               chrome.storage.local.get(["pl_tabid"], (result) => {
                 if(result.pl_tabid != null) {

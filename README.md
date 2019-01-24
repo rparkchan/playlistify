@@ -1,3 +1,3 @@
 ## playlistify
 
-React-based API-free Chrome extension to convert/manage playlists from Chrome bookmarks. 
+Chrome extension lending "playlist"-like functionality to bookmarks. Built with React.

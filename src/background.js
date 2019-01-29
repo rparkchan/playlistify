@@ -1,6 +1,20 @@
 /*global chrome*/
 
-chrome.storage.local.remove(['pl_tabid', 'pl_index', 'pl_windowid']);
+// open a new window/tab at ind of a playlist with url=url
+function newPlaylistInstance(musmode, ind, url) {
+  if(musmode) {
+    chrome.windows.create({url:url, type:"popup"}, (ic_window) => {
+      chrome.storage.local.set({pl_tabid:ic_window.tabs[0].id,
+                                pl_windowid:ic_window.id,
+                                pl_index:ind,});
+    });     
+  }
+  else {
+    chrome.tabs.create({url:url}, (tab) => {
+      chrome.storage.local.set({pl_tabid:tab.id, pl_index:ind});
+    });
+  }  
+}
 
 // called upon new_index message
 function handleNewIndex(message, sender) {
@@ -9,25 +23,26 @@ function handleNewIndex(message, sender) {
     let new_url = result.pl_playlist[message.new_index].url;
     if(result.pl_tabid != null) { 
       let active_tab = sender.tab!=null && sender.tab.id==result.pl_tabid;
-      if((active_tab && result.pl_musmode) || sender.tab == null) {
+      if((active_tab && result.pl_musmode)) {
         chrome.tabs.update(result.pl_tabid, {url:new_url}, () => {
           chrome.storage.local.set({pl_index:message.new_index});
-        })
+        });
+      }
+      else if(sender.tab == null) {
+        chrome.tabs.get(result.pl_tabid, () => {
+          if(!chrome.runtime.lastError) {
+            chrome.tabs.update(result.pl_tabid, {url:new_url}, () => {
+              chrome.storage.local.set({pl_index:message.new_index});
+            });           
+          }
+          else {
+            newPlaylistInstance(result.pl_musmode, message.new_index, new_url);
+          }
+        });
       }
     }
     else { 
-      if(result.pl_musmode) {
-        chrome.windows.create({url:new_url, type:"popup"}, (ic_window) => {
-          chrome.storage.local.set({pl_tabid:ic_window.tabs[0].id,
-                                    pl_windowid:ic_window.id,
-                                    pl_index:message.new_index,});
-        });     
-      }
-      else {
-        chrome.tabs.create({url:new_url}, (tab) => {
-          chrome.storage.local.set({pl_tabid:tab.id, pl_index:message.new_index});
-        })
-      }
+      newPlaylistInstance(result.pl_musmode, message.new_index, new_url);
     }
   })
 }

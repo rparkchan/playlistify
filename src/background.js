@@ -71,4 +71,9 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
       chrome.storage.local.remove(['pl_tabid', 'pl_index', 'pl_windowid']);
     }
   })
-})
+});
+
+// listen for new install/reset
+chrome.runtime.onInstalled.addListener((details) => {
+  chrome.storage.local.remove(['pl_tabid', 'pl_index', 'pl_windowid', 'pl_playlist', 'pl_musmode', 'pl_view'])
+});

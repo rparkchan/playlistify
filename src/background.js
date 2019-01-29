@@ -1,5 +1,7 @@
 /*global chrome*/
 
+chrome.storage.local.remove(['pl_tabid', 'pl_index', 'pl_windowid']);
+
 // called upon new_index message
 function handleNewIndex(message, sender) {
   let fetch_vars = ['pl_tabid', 'pl_playlist', 'pl_musmode'];
@@ -51,7 +53,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
   chrome.storage.local.get(['pl_tabid'], (result) => {
     if(result.pl_tabid == tabId) {
-      chrome.storage.local.remove(['pl_tabid', 'pl_index']);
+      chrome.storage.local.remove(['pl_tabid', 'pl_index', 'pl_windowid']);
     }
   })
 })

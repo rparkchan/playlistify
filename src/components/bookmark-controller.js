@@ -24,7 +24,7 @@ class BookmarkController extends React.Component {
         this.setState({musmode:result.pl_musmode})
       }
       else {
-        chrome.storage.local.set({pl_musmode:false});
+        chrome.storage.local.set({pl_musmode:true});
       }
     })
   }
@@ -93,7 +93,7 @@ class BookmarkController extends React.Component {
                 });
               }}
             >
-              &#x0266A; Mode
+              &#x0266A; Autoplay
             </button>
           </div>
 

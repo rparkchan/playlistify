@@ -2,18 +2,9 @@
 
 // open a new window/tab at ind of a playlist with url=url
 function newPlaylistInstance(musmode, ind, url) {
-  if(musmode) {
-    chrome.windows.create({url:url, type:"popup"}, (ic_window) => {
-      chrome.storage.local.set({pl_tabid:ic_window.tabs[0].id,
-                                pl_windowid:ic_window.id,
-                                pl_index:ind,});
-    });     
-  }
-  else {
-    chrome.tabs.create({url:url}, (tab) => {
-      chrome.storage.local.set({pl_tabid:tab.id, pl_index:ind});
-    });
-  }  
+  chrome.tabs.create({url:url}, (tab) => {
+    chrome.storage.local.set({pl_tabid:tab.id, pl_index:ind});
+  });
 }
 
 // called upon new_index message

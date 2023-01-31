@@ -30,7 +30,7 @@
     "https://*/*"
   ],
   "permissions": [
-    "bookmarks", "tabs", "storage", "chrome://favicon/*", "chrome://favicon/"
+    "bookmarks", "tabs", "storage", "favicon"
   ],
   "content_security_policy": {
     "script-src": "self",

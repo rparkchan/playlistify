@@ -9,6 +9,15 @@ import {styles} from './styles.js';
  *   and a button to remove the element from the list.
  */
 
+// see https://stackoverflow.com/a/75035074
+const favicon = (pageUrl, size) => {
+  const url = new URL(`chrome-extension://${chrome.runtime.id}/_favicon/`);
+  url.searchParams.append("pageUrl", pageUrl);
+  url.searchParams.append("size", size.toString());
+
+  return url.href;
+};
+
 function BookmarkEntry(props) {
   return (
     <div style={styles.bm_entry.outer_div({})}>
@@ -20,7 +29,8 @@ function BookmarkEntry(props) {
           });
         }}  
       > 
-        <img style={styles.bm_entry.click_image({})} src={"chrome://favicon/size/16@1x/"+props.url}/>
+        {/* <img style={styles.bm_entry.click_image({})} src={"chrome://favicon/size/16@1x/"+props.url}/> */}
+        <img style={styles.bm_entry.click_image({})} src={favicon(props.url, 16)} loading={'lazy'}/>
         <div style={styles.bm_entry.click_title({})}>
           {props.title}
         </div>
